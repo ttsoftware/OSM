@@ -3,7 +3,7 @@ Discarded input sections
 
  .reginfo       0x0000000000000000       0x18 _syscall.o
  .reginfo       0x0000000000000000       0x18 lib.o
- .reginfo       0x0000000000000000       0x18 halt.o
+ .reginfo       0x0000000000000000       0x18 hello.o
 
 Memory Configuration
 
@@ -37,7 +37,7 @@ ro_segment      0x0000000000001000      0x4c8
                 0x00000000000013a8                syscall_write
                 0x00000000000013fc                syscall_create
                 0x000000000000144c                syscall_delete
- .text          0x0000000000001494       0x34 halt.o
+ .text          0x0000000000001494       0x34 hello.o
                 0x0000000000001494                main
 
 rw_segment      0x0000000000002000        0x0
@@ -48,14 +48,14 @@ rw_segment      0x0000000000002000        0x0
  .bss           0x0000000000002000        0x0 _syscall.o
  .data          0x0000000000002000        0x0 lib.o
  .bss           0x0000000000002000        0x0 lib.o
- .data          0x0000000000002000        0x0 halt.o
- .bss           0x0000000000002000        0x0 halt.o
+ .data          0x0000000000002000        0x0 hello.o
+ .bss           0x0000000000002000        0x0 hello.o
                 0x0000000000002000                BINARY_ENDS_HERE = .
 LOAD crt.o
 LOAD _syscall.o
 LOAD lib.o
-LOAD halt.o
-OUTPUT(halt elf32-bigmips)
+LOAD hello.o
+OUTPUT(hello elf32-bigmips)
 
 .reginfo        0x0000000000000000       0x18
  .reginfo       0x0000000000000000       0x18 crt.o
@@ -64,23 +64,23 @@ OUTPUT(halt elf32-bigmips)
  .pdr           0x0000000000000000       0x40 crt.o
  .pdr           0x0000000000000040       0x20 _syscall.o
  .pdr           0x0000000000000060      0x1e0 lib.o
- .pdr           0x0000000000000240       0x20 halt.o
+ .pdr           0x0000000000000240       0x20 hello.o
 
 .mdebug.abi32   0x0000000000000000        0x0
  .mdebug.abi32  0x0000000000000000        0x0 lib.o
- .mdebug.abi32  0x0000000000000000        0x0 halt.o
+ .mdebug.abi32  0x0000000000000000        0x0 hello.o
 
 .comment        0x0000000000000000       0x11
  .comment       0x0000000000000000       0x11 lib.o
                                          0x12 (size before relaxing)
- .comment       0x0000000000000000       0x12 halt.o
+ .comment       0x0000000000000000       0x12 hello.o
 
 .gnu.attributes
                 0x0000000000000000       0x10
  .gnu.attributes
                 0x0000000000000000       0x10 lib.o
  .gnu.attributes
-                0x0000000000000010       0x10 halt.o
+                0x0000000000000010       0x10 hello.o
 
 Cross Reference Table
 
@@ -89,7 +89,7 @@ __main                                            crt.o
 _start                                            crt.o
 _syscall                                          _syscall.o
                                                   lib.o
-main                                              halt.o
+main                                              hello.o
                                                   crt.o
 syscall_close                                     lib.o
 syscall_create                                    lib.o
@@ -99,8 +99,8 @@ syscall_execp                                     lib.o
 syscall_exit                                      lib.o
 syscall_fork                                      lib.o
 syscall_halt                                      lib.o
-                                                  halt.o
 syscall_hello                                     lib.o
+                                                  hello.o
 syscall_join                                      lib.o
 syscall_memlimit                                  lib.o
 syscall_open                                      lib.o

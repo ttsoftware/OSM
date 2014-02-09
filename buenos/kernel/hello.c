@@ -1,3 +1,4 @@
+#include "kernel/halt.h"
 #include "kernel/hello.h"
 #include "drivers/metadev.h"
 #include "lib/libc.h"

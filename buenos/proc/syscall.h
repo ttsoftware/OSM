@@ -41,6 +41,7 @@
  * modify the existing ones.
  */
 #define SYSCALL_HALT 0x001
+#define SYSCALL_HELLO 0x111
 #define SYSCALL_EXEC 0x101
 #define SYSCALL_EXIT 0x102
 #define SYSCALL_JOIN 0x103

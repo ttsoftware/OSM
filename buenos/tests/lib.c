@@ -51,6 +51,10 @@ void syscall_halt(void)
     _syscall(SYSCALL_HALT, 0, 0, 0);
 }
 
+/* Display hello world */
+void syscall_hello(void) {
+    _syscall(SYSCALL_HELLO, 0, 0, 0);
+}
 
 /* Load the file indicated by 'filename' as a new process and execute
  * it. Returns the process ID of the created process. Negative values

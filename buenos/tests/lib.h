@@ -50,6 +50,7 @@ uint32_t _syscall(uint32_t syscall_num, uint32_t a1, uint32_t a2, uint32_t a3);
 /* The library functions which are just wrappers to the _syscall function. */
 
 void syscall_halt(void);
+void syscall_hello(void);
 
 int syscall_exec(const char *filename);
 int syscall_execp(const char *filename, int argc, const char **argv);

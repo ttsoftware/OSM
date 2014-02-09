@@ -36,6 +36,7 @@
 #include "kernel/cswitch.h"
 #include "proc/syscall.h"
 #include "kernel/halt.h"
+#include "kernel/hello.h"
 #include "kernel/panic.h"
 #include "lib/libc.h"
 #include "kernel/assert.h"
@@ -61,6 +62,9 @@ void syscall_handle(context_t *user_context)
     switch(user_context->cpu_regs[MIPS_REGISTER_A0]) {
     case SYSCALL_HALT:
         halt_kernel();
+        break;
+    case SYSCALL_HELLO:
+        hello_world();
         break;
     default: 
         KERNEL_PANIC("Unhandled system call\n");
