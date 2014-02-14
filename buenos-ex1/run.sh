@@ -3,7 +3,7 @@
 make clean
 make
 make -C tests/
-util/tfstool delete fyams.harddisk read
-util/tfstool write fyams.harddisk tests/read read
-fyams-sim buenos 'initprog=[disk1]read'
+util/tfstool delete fyams.harddisk readwrite
+util/tfstool write fyams.harddisk tests/readwrite readwrite
+fyams-sim buenos 'initprog=[disk1]readwrite'
 

@@ -6,25 +6,22 @@
 #include "proc/syscall.h"
 
 int syscall_read(int fhandle, void *buffer, int length) {
-	if (fhandle == FILEHANDLE_STDIN) {
-		device_t *dev;
-		gcd_t *gcd;
 
-		dev = device_get(YAMS_TYPECODE_TTY, 0);
-		KERNEL_ASSERT(dev != NULL);
+	KERNEL_ASSERT(fhandle == FILEHANDLE_STDIN);
 
-		gcd = (gcd_t *)dev->generic_device;
-		KERNEL_ASSERT(gcd != NULL);
+	device_t *dev = device_get(YAMS_TYPECODE_TTY, 0);
+	KERNEL_ASSERT(dev != NULL);
 
-		int len = snprintf(buffer, 63, "\nHEJ.\n\n");
-	    gcd->write(gcd, buffer, len);
+	gcd_t *gcd = (gcd_t *)dev->generic_device;
+	KERNEL_ASSERT(gcd != NULL);
 
-	    len = 0;
-	    while (len < length) {
-	    	len += gcd->read(gcd, buffer, length);
-	    }
+    int len = 0;
+    while (len < length) {
+    	gcd->read(gcd, buffer, len);
+    	len++;
+    }
 
-		return len;
-	}
-	return 0;
+    KERNEL_ASSERT(len == length);
+
+	return len;
 }

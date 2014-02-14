@@ -138,7 +138,6 @@ int snprintf(char *str, int size, const  char  *fmt, ...) {
 
 
 
-
 #define FLAG_SMALLS  0x01
 #define FLAG_ALT     0x02
 #define FLAG_ZEROPAD 0x04
