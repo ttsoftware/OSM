@@ -1,9 +1,5 @@
-/*
- * double-linked list
- */
-
-#ifndef BUENOS_LIB_DLIST_H
-#define BUENOS_LIB_DLIST_H
+#ifndef DLIST_H
+#define DLIST_H
 
 typedef int bool;
 typedef void item; /* we store pointers */
@@ -21,6 +17,6 @@ typedef struct dlist_ {
 void insert(dlist *this, item* thing, bool atTail);
 item* extract(dlist *this, bool atTail);
 void reverse(dlist *this);
-item* search(dlist *this, bool(*matches(item *)));
+item* search(dlist *this, bool (*matches)(item *));
 
-#endif /* BUENOS_LIB_DLIST_H */
+#endif /* DLIST_H */

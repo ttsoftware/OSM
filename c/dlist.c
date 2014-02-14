@@ -3,24 +3,42 @@
 #include <stdint.h>
 #include "dlist.h"
 
-void insert(dlist *this, item* thing, bool atTail) {
-    
-    dlist list = *this;
+void insert(dlist *list, item* thing, bool atTail) {
 
-    node* head = list.head;
-    //node tail = *list.tail;
-
+    node* refNode = NULL;
     struct node_ *new_node = (struct node_ *) malloc (sizeof (struct node_));
-    
-    new_node->thing = thing; 
-    new_node->ptr = head;
-
-    //if (&head != NULL) {
-        struct node_ *next = head->ptr;
-        head->ptr = (node*) ((uintptr_t)new_node ^ (uintptr_t)next);
-    //}
 
     if (!atTail) {
-        list.head = new_node;   
+        refNode = list->head;
+        list->head = new_node;   
     }
+    else {
+        refNode = list->tail;
+        list->tail = new_node;
+    }
+
+    new_node->thing = thing;
+    new_node->ptr = refNode;
+
+    if (refNode != NULL) {
+        struct node_ *next = refNode->ptr;
+        refNode->ptr = (node*) ((uintptr_t)new_node ^ (uintptr_t)next);
+    }
+}
+
+item* search(dlist *list, bool (*matches)(item *)) {
+
+    node *current_item = list->head;
+    node *prev = NULL;
+
+    while (current_item != NULL) {
+        if (current_item->thing == matches) {
+            return current_item->thing;
+        }
+        node* temp = current_item;
+        current_item = (node*) ((uintptr_t)(current_item->ptr) ^ (uintptr_t)prev);
+        prev = temp;
+    }
+
+    return NULL;
 }
