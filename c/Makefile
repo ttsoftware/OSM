@@ -5,7 +5,7 @@ LIBS	 := dlist.c
 OBJECTS  := $(patsubst %.c, %.o, $(SOURCES))
 TARGETS  := $(patsubst %.o, %, $(OBJECTS))
 
-CC      := gcc -Werror
+CC      := gcc -Werror -Wall -pedantic -std=c99 -ggdb
 
 all: $(TARGETS)
 
