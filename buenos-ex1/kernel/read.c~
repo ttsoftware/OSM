@@ -3,5 +3,5 @@
 #include "drivers/metadev.h"
 
 int syscall_read(int fhandle, void *buffer, int length) {
-    return 0;
+    
 }
