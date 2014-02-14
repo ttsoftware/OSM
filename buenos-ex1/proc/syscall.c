@@ -68,10 +68,17 @@ void syscall_handle(context_t *user_context)
             uint32_t arg1 = user_context->cpu_regs[MIPS_REGISTER_A1];
             uint32_t arg2 = user_context->cpu_regs[MIPS_REGISTER_A2];
             uint32_t arg3 = user_context->cpu_regs[MIPS_REGISTER_A3];
-            syscall_read((int)&arg1, (void *)&arg2, (int)&arg3);
+            syscall_read((int)arg1, (void *)arg2, (int)arg3);
+            break;
+        case SYSCALL_WRITE: ;
+            uint32_t _arg1 = user_context->cpu_regs[MIPS_REGISTER_A1];
+            uint32_t _arg2 = user_context->cpu_regs[MIPS_REGISTER_A2];
+            uint32_t _arg3 = user_context->cpu_regs[MIPS_REGISTER_A3];
+            syscall_write((int)_arg1, (void *)_arg2, (int)_arg3);
             break;
         default: 
             KERNEL_PANIC("Unhandled system call\n");
+            break;
     }
 
     /* Move to next instruction after system call */

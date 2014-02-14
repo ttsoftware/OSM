@@ -52,7 +52,7 @@ typedef struct gcd_struct {
     /* Pointer to a function which reads at most len bytes from the
        device to buf. The function returns the number of bytes read.
        Note the call can block. */
-    int  (*read)(struct gcd_struct *gcd, void *buf, int len);
+    int (*read)(struct gcd_struct *gcd, void *buf, int len);
 } gcd_t;
 
 #endif /* DRIVERS_GCD_H */
