@@ -36,6 +36,8 @@
 #include "kernel/cswitch.h"
 #include "proc/syscall.h"
 #include "kernel/halt.h"
+#include "kernel/read.h"
+#include "kernel/write.h"
 #include "kernel/panic.h"
 #include "lib/libc.h"
 #include "kernel/assert.h"
@@ -59,11 +61,17 @@ void syscall_handle(context_t *user_context)
      * restored from user_context.
      */
     switch(user_context->cpu_regs[MIPS_REGISTER_A0]) {
-    case SYSCALL_HALT:
-        halt_kernel();
-        break;
-    default: 
-        KERNEL_PANIC("Unhandled system call\n");
+        case SYSCALL_HALT:
+            halt_kernel();
+            break;
+        case SYSCALL_READ: ;
+            uint32_t arg1 = user_context->cpu_regs[MIPS_REGISTER_A1];
+            uint32_t arg2 = user_context->cpu_regs[MIPS_REGISTER_A2];
+            uint32_t arg3 = user_context->cpu_regs[MIPS_REGISTER_A3];
+            syscall_read((int)&arg1, (void *)&arg2, (int)&arg3);
+            break;
+        default: 
+            KERNEL_PANIC("Unhandled system call\n");
     }
 
     /* Move to next instruction after system call */
