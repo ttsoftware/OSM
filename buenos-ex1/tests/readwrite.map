@@ -69,10 +69,11 @@ OUTPUT(readwrite elf32-bigmips)
  .mdebug.abi32  0x0000000000000000        0x0 lib.o
  .mdebug.abi32  0x0000000000000000        0x0 readwrite.o
 
-.comment        0x0000000000000000       0x11
+.comment        0x0000000000000000       0x22
  .comment       0x0000000000000000       0x11 lib.o
                                          0x12 (size before relaxing)
- .comment       0x0000000000000000       0x12 readwrite.o
+ .comment       0x0000000000000011       0x11 readwrite.o
+                                         0x12 (size before relaxing)
 
 .gnu.attributes
                 0x0000000000000000       0x10

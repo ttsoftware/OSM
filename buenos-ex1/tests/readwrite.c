@@ -4,10 +4,10 @@
 
 int main(void) {
 
-	char buffer[2];
+	char buffer[10];
 
 	// det er read der ikke virker. Den læser kun det sidste input.
-    int len = syscall_read(FILEHANDLE_STDIN, &buffer, 2);
+    int len = syscall_read(FILEHANDLE_STDIN, &buffer, 10);
 
 	len = syscall_write(FILEHANDLE_STDOUT, &buffer, len);
 
