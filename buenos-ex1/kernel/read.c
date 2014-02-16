@@ -17,9 +17,9 @@ int syscall_read(int fhandle, void *buffer, int length) {
 
     int len = 0;
     while (len < length) {
-    gcd->read(gcd, buffer, len);
-    buffer ++;
-    len ++;
+	    gcd->read(gcd, buffer, len);
+	    ++buffer;
+	    ++len;
     }
 
     KERNEL_ASSERT(len == length);

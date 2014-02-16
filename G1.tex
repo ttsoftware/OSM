@@ -16,7 +16,8 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 \usepackage{geometry}
-\usetikzlibrary{positioning,shapes, shadows, arrows}\usepackage{tikz}
+\usetikzlibrary{positioning,shapes, shadows, arrows}
+\usepackage{tikz}
 \usepackage{url}
 \linespread{1.2}
 \usepackage{fancyhdr}
@@ -41,6 +42,9 @@
     \end{center}
     \vspace*{\fill}
 \end{titlepage}
+
+\section{A space-efficient doubly-linked list}
+We have implemented a doubly-linked list in the C programming language, which uses bitwise XOR operations to save memory. We have implemented the list operations using standard C libraries. The code includes a few comments to improve reading, but should otherwise be straight forward. The program dlisttest.c demonstrates the implementation. 
 
 \section{Buenos system calls for basic I/O}
 We were asked to implement the functionality of the two system calls; read and write. In order to do this several changes to Buenos had to be made, including the kernel and procedures. In the folder \textit{proc} the file \textit{syscall.c} has been changed in order to implement the two system calls. These system calls vary from the one already implemented, halt, because read and write expects function arguments. Therefore we had to get these from the mips registers a1, a2 and a3, and pass them as function arguments to the functions.\\\\

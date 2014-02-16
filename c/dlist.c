@@ -3,6 +3,9 @@
 #include <stdint.h>
 #include "dlist.h"
 
+/*
+ * Custom XOR function for more clean code.
+ **/
 node* xor(node* ptr1, node* ptr2) {
     return (node*) ((uintptr_t)ptr1 ^ (uintptr_t)ptr2);
 }
@@ -30,11 +33,18 @@ void insert(dlist *list, item* thing, bool atTail) {
     new_node->ptr = refNode;
 
     if (refNode != NULL) {
-        struct node_ *next = refNode->ptr;
-        refNode->ptr = xor(new_node, next);
+        struct node_ *sibling = refNode->ptr;
+        refNode->ptr = xor(new_node, sibling);
     }
 }
 
+/*
+ * We use the fact that due to the associativity of xor,
+ *   (a = b xor c) = (b = a xor c)
+ * and the fact that 
+ *   b xor 0 = b
+ * to update the pointers stored in the outer nodes.
+ **/
 item* extract(dlist *list, bool atTail) {
     if (atTail) {
         node *tail = list->tail;

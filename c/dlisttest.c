@@ -10,7 +10,6 @@ void printdlist(dlist *list) {
 	node *current_item = list->head;
 	node *prev = NULL;
 	while (current_item != NULL) {
-		
 		printf("%d\n", *((int*)current_item->thing));
 
 		node* temp = current_item;
@@ -58,5 +57,9 @@ int main(void) {
 	// extract tail
 	printf("%d\n", *((int*)extract(list, 1))); // 4
 
+	// print the list to ensure elements 1 and 4 has been extracted.
+	printdlist(list); // 2, 3
+
+	printf("%s\n", "Above should be printed: 2 1 2 3 4 1 4 2 3");
 	return 0;
 }
