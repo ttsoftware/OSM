@@ -60,6 +60,9 @@ item* extract(dlist *list, bool atTail) {
     return head->thing;
 }
 
+/*
+ * Simply iterate over the elements, and use the input function.
+ **/
 item* search(dlist *list, bool (*matches)(item *)) {
     node *current_item = list->head;
     node *prev = NULL;
@@ -75,6 +78,12 @@ item* search(dlist *list, bool (*matches)(item *)) {
     return NULL;
 }
 
+/*
+ * The head points to the 2nd element, while the tail points to the 2nd-last element.
+ * The 2nd element points to the 3rd element, and so forth.
+ * By swapping the head and tail, the list appears to be reversed, 
+ * since the head now points to the 2nd-last element.
+ **/
 void reverse(dlist *list) {
     node *head = list->head;
     node *tail = list->tail;
