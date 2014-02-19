@@ -88,19 +88,19 @@ void syscall_handle(context_t *user_context)
      * restored from user_context.
      */
     switch(user_context->cpu_regs[MIPS_REGISTER_A0]) {
-    case SYSCALL_HALT:
-        halt_kernel();
-        break;
-    case SYSCALL_WRITE:
-        user_context->cpu_regs[MIPS_REGISTER_V0] =
-            syscall_write(A1, (char *)A2, A3);
-        break;
-    case SYSCALL_READ:
-        user_context->cpu_regs[MIPS_REGISTER_V0] =
-            syscall_read(A1, (char *)A2, A3);
-        break;
-    default:
-        KERNEL_PANIC("Unhandled system call\n");
+        case SYSCALL_HALT:
+            halt_kernel();
+            break;
+        case SYSCALL_WRITE:
+            user_context->cpu_regs[MIPS_REGISTER_V0] =
+                syscall_write(A1, (char *)A2, A3);
+            break;
+        case SYSCALL_READ:
+            user_context->cpu_regs[MIPS_REGISTER_V0] =
+                syscall_read(A1, (char *)A2, A3);
+            break;
+        default:
+            KERNEL_PANIC("Unhandled system call\n");
     }
 
     /* Move to next instruction after system call */

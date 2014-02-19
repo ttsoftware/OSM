@@ -40,6 +40,7 @@
 #include "kernel/assert.h"
 #include "kernel/interrupt.h"
 #include "kernel/config.h"
+#include "kernel/kmalloc.h"
 #include "fs/vfs.h"
 #include "drivers/yams.h"
 #include "vm/vm.h"
@@ -51,6 +52,25 @@
  */
 
 process_control_block_t process_table[PROCESS_MAX_PROCESSES];
+
+/*
+ * Create and append new process to process table
+ */
+process_control_block_t* add_proc() {
+    struct _process_control_block_t *new_proc = 
+        (struct _process_control_block_t *) kmalloc (sizeof (struct _process_control_block_t));
+    for (int i = 0; i < PROCESS_MAX_PROCESSES; i++) {
+        if (&(process_table[i]) == NULL 
+              || process_table[i].state == PROCESS_STATE_DEAD) {
+            new_proc->pid = i;
+            new_proc->state = PROCESS_STATE_NEW;
+            process_table[i] = *new_proc;
+            return new_proc;
+        }
+    }
+    KERNEL_PANIC("No available process table entry.");
+    return new_proc;
+}
 
 /**
  * Starts one userland process. The thread calling this function will
@@ -166,7 +186,6 @@ void process_start(const char *executable)
 		      == (int)elf.rw_size);
     }
 
-
     /* Set the dirty bit to zero (read-only) on read-only pages. */
     for(i = 0; i < (int)elf.ro_pages; i++) {
         vm_set_dirty(my_entry->pagetable, elf.ro_vaddr + i*PAGE_SIZE, 0);
@@ -189,27 +208,32 @@ void process_start(const char *executable)
 }
 
 void process_init() {
-  KERNEL_PANIC("Not implemented.");
+    KERNEL_PANIC("Not implemented.");
 }
 
 process_id_t process_spawn(const char *executable) {
-  executable = executable;
-  KERNEL_PANIC("Not implemented.");
-  return 0; /* Dummy */
+    // create new process
+    process_control_block_t* new_proc = add_proc();
+    
+    new_proc = new_proc;
+
+    executable = executable;
+    //process_start(executable);
+
+    return 0; /* Dummy */
 }
 
 /* Stop the process and the thread it runs in. Sets the return value as well */
 void process_finish(int retval) {
-  retval=retval;
-  KERNEL_PANIC("Not implemented.");
+    retval=retval;
+    KERNEL_PANIC("Not implemented.");
 }
 
 int process_join(process_id_t pid) {
-  pid=pid;
-  KERNEL_PANIC("Not implemented.");
-  return 0; /* Dummy */
+    pid=pid;
+    KERNEL_PANIC("Not implemented.");
+    return 0; /* Dummy */
 }
-
 
 process_id_t process_get_current_process(void)
 {
@@ -224,6 +248,5 @@ process_control_block_t *process_get_current_process_entry(void)
 process_control_block_t *process_get_process_entry(process_id_t pid) {
     return &process_table[pid];
 }
-
 
 /** @} */
