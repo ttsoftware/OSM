@@ -132,7 +132,9 @@ void init_startup_thread(uint32_t arg)
 
     kprintf("Starting initial program '%s'\n", bootargs_get("initprog"));
 
-    process_start(bootargs_get("initprog"));
+    int new_proc_pid = add_proc(bootargs_get("initprog"));
+
+    process_start(new_proc_pid);
 
     /* The current process_start() should never return. */
     KERNEL_PANIC("Run out of initprog.\n");
@@ -195,6 +197,9 @@ void init(void)
 
     kwrite("Initializing threading system\n");
     thread_table_init();
+
+    kwrite("Initializing user process system\n");
+    process_init();
 
     kwrite("Initializing sleep queue\n");
     sleepq_init();

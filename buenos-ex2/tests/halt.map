@@ -20,14 +20,14 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x2678
+ro_segment      0x0000000000001000     0x25e0
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
                 0x0000000000001018                __main
  .text          0x0000000000001024        0xc _syscall.o
                 0x0000000000001024                _syscall
- .text          0x0000000000001030     0x2504 lib.o
+ .text          0x0000000000001030     0x246c lib.o
                 0x0000000000001030                syscall_halt
                 0x0000000000001070                syscall_exec
                 0x00000000000010b8                syscall_execp
@@ -50,26 +50,26 @@ ro_segment      0x0000000000001000     0x2678
                 0x0000000000001788                strcmp
                 0x00000000000017d0                strncmp
                 0x0000000000001904                memcmp
-                0x00000000000019f0                strstr
-                0x0000000000001a98                memset
-                0x0000000000001b2c                memcpy
-                0x0000000000001bdc                putc
-                0x0000000000001c20                puts
-                0x0000000000001ccc                getc_raw
-                0x0000000000001d10                getc
-                0x0000000000001d68                gets
-                0x0000000000001e20                readline
-                0x0000000000002d48                printf
-                0x0000000000002db8                snprintf
-                0x0000000000002e20                heap_init
-                0x0000000000002e70                malloc
-                0x0000000000003060                free
-                0x0000000000003260                calloc
-                0x0000000000003320                realloc
-                0x000000000000343c                atoi
- .rodata        0x0000000000003534      0x110 lib.o
- .text          0x0000000000003644       0x34 halt.o
-                0x0000000000003644                main
+                0x00000000000019e0                strstr
+                0x0000000000001a84                memset
+                0x0000000000001b00                memcpy
+                0x0000000000001b94                putc
+                0x0000000000001bd8                puts
+                0x0000000000001c84                getc_raw
+                0x0000000000001cc8                getc
+                0x0000000000001d20                gets
+                0x0000000000001dd4                readline
+                0x0000000000002cb8                printf
+                0x0000000000002d28                snprintf
+                0x0000000000002d90                heap_init
+                0x0000000000002de0                malloc
+                0x0000000000002fc4                free
+                0x00000000000031c8                calloc
+                0x0000000000003288                realloc
+                0x00000000000033a4                atoi
+ .rodata        0x000000000000349c      0x110 lib.o
+ .text          0x00000000000035ac       0x34 halt.o
+                0x00000000000035ac                main
 
 rw_segment      0x0000000000004000      0x104
  *(.data .bss COMMON)

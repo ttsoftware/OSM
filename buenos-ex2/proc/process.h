@@ -39,7 +39,8 @@
 
 typedef int process_id_t;
 
-void process_start(const char *executable);
+void process_start(uint32_t pid);
+int add_proc(const char* executable);
 
 #define USERLAND_STACK_TOP 0x7fffeffc
 
@@ -49,7 +50,7 @@ void process_start(const char *executable);
 #define PROCESS_MAX_PROCESSES 32
 
 /* Process states */
-#define PROCESS_STATE_DEAD -1
+#define PROCESS_STATE_DEAD -42
 #define PROCESS_STATE_ZOMBIE 0
 #define PROCESS_STATE_RUNNING 1
 #define PROCESS_STATE_READY 2
@@ -59,6 +60,8 @@ void process_start(const char *executable);
 typedef struct _process_control_block_t {
     process_id_t pid;
     int state;
+    const char* prog;
+    int exitcode;
 } process_control_block_t;
 
 /* Initialize the process table.  This must be called during kernel

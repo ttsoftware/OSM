@@ -83,15 +83,15 @@ void thread_table_init(void)
     /* Init all entries to 'NULL' */
     for (i=0; i<CONFIG_MAX_THREADS; i++) {
 	/* Set context pointers to the top of the stack*/
-	thread_table[i].context      = (context_t *) (thread_stack_areas
-	    +CONFIG_THREAD_STACKSIZE*i + CONFIG_THREAD_STACKSIZE - 
-						      sizeof(context_t));
-	thread_table[i].user_context = NULL;
-	thread_table[i].state        = THREAD_FREE;
-	thread_table[i].sleeps_on    = 0;
-	thread_table[i].pagetable    = NULL;
-	thread_table[i].process_id   = -1;	
-	thread_table[i].next         = -1;	
+    	thread_table[i].context      = (context_t *) (thread_stack_areas
+    	    +CONFIG_THREAD_STACKSIZE*i + CONFIG_THREAD_STACKSIZE - 
+    						      sizeof(context_t));
+    	thread_table[i].user_context = NULL;
+    	thread_table[i].state        = THREAD_FREE;
+    	thread_table[i].sleeps_on    = 0;
+    	thread_table[i].pagetable    = NULL;
+    	thread_table[i].process_id   = -1;	
+    	thread_table[i].next         = -1;	
     }
 
     thread_table[IDLE_THREAD_TID].context->cpu_regs[MIPS_REGISTER_SP] =
@@ -123,7 +123,6 @@ TID_t thread_create(void (*func)(uint32_t), uint32_t arg)
     static TID_t next_tid = 0;
     TID_t i, tid = -1;
 
-
     interrupt_status_t intr_status;
       
     intr_status = _interrupt_disable();
@@ -132,23 +131,23 @@ TID_t thread_create(void (*func)(uint32_t), uint32_t arg)
     
     /* Find the first free thread table entry starting from 'next_tid' */
     for (i=0; i<CONFIG_MAX_THREADS; i++) {
-	TID_t t = (i + next_tid) % CONFIG_MAX_THREADS;
+    	TID_t t = (i + next_tid) % CONFIG_MAX_THREADS;
 
-	if(t == IDLE_THREAD_TID)
-	    continue;
-	
-	if (thread_table[t].state
-	    == THREAD_FREE) {
-	    tid = t;
-	    break;
-	}
+    	if (t == IDLE_THREAD_TID) {
+    	    continue;
+        }
+    	
+    	if (thread_table[t].state == THREAD_FREE) {
+    	    tid = t;
+    	    break;
+    	}
     }
 
     /* Is the thread table full? */
     if (tid < 0) { 
-	spinlock_release(&thread_table_slock);
-	_interrupt_set_state(intr_status);
-	return tid;
+    	spinlock_release(&thread_table_slock);
+    	_interrupt_set_state(intr_status);
+    	return tid;
     }
 
     next_tid = (tid+1) % CONFIG_MAX_THREADS;
@@ -163,7 +162,7 @@ TID_t thread_create(void (*func)(uint32_t), uint32_t arg)
 	 sizeof(context_t));
 
     for (i=0; i< (int) sizeof(context_t)/4; i++) {
-	*(((uint32_t *) thread_table[tid].context) + i) = 0;
+        *(((uint32_t *) thread_table[tid].context) + i) = 0;
     }
 
     thread_table[tid].user_context = NULL;

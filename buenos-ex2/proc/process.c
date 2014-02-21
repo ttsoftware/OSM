@@ -34,6 +34,7 @@
  *
  */
 
+#include "lib/libc.h"
 #include "proc/process.h"
 #include "proc/elf.h"
 #include "kernel/thread.h"
@@ -41,6 +42,7 @@
 #include "kernel/interrupt.h"
 #include "kernel/config.h"
 #include "kernel/kmalloc.h"
+#include "kernel/sleepq.h"
 #include "fs/vfs.h"
 #include "drivers/yams.h"
 #include "vm/vm.h"
@@ -53,24 +55,8 @@
 
 process_control_block_t process_table[PROCESS_MAX_PROCESSES];
 
-/*
- * Create and append new process to process table
- */
-process_control_block_t* add_proc() {
-    struct _process_control_block_t *new_proc = 
-        (struct _process_control_block_t *) kmalloc (sizeof (struct _process_control_block_t));
-    for (int i = 0; i < PROCESS_MAX_PROCESSES; i++) {
-        if (&(process_table[i]) == NULL 
-              || process_table[i].state == PROCESS_STATE_DEAD) {
-            new_proc->pid = i;
-            new_proc->state = PROCESS_STATE_NEW;
-            process_table[i] = *new_proc;
-            return new_proc;
-        }
-    }
-    KERNEL_PANIC("No available process table entry.");
-    return new_proc;
-}
+/** Spinlock which must be held when manipulating the process table */
+spinlock_t process_table_slock;
 
 /**
  * Starts one userland process. The thread calling this function will
@@ -84,8 +70,9 @@ process_control_block_t* add_proc() {
  * @executable The name of the executable to be run in the userland
  * process
  */
-void process_start(const char *executable)
+void process_start(uint32_t pid)
 {
+    const char* executable = process_table[pid].prog;
     thread_table_t *my_entry;
     pagetable_t *pagetable;
     uint32_t phys_page;
@@ -107,6 +94,8 @@ void process_start(const char *executable)
 
     pagetable = vm_create_pagetable(thread_get_current_thread());
     KERNEL_ASSERT(pagetable != NULL);
+
+    my_entry->process_id = pid;
 
     intr_status = _interrupt_disable();
     my_entry->pagetable = pagetable;
@@ -208,31 +197,92 @@ void process_start(const char *executable)
 }
 
 void process_init() {
-    KERNEL_PANIC("Not implemented.");
+    spinlock_reset(&process_table_slock);
+    for (int i = 0; i < PROCESS_MAX_PROCESSES; i++) {      
+        process_table[i].pid = i;
+        process_table[i].state = PROCESS_STATE_DEAD;
+    }
+}
+
+/*
+ * Create and append new process to process table
+ */
+int add_proc(const char* executable) {
+    
+    spinlock_acquire(&process_table_slock);
+    int pid = -1;
+
+    for (int i = 0; i < PROCESS_MAX_PROCESSES; i++) {
+        if (process_table[i].state == PROCESS_STATE_DEAD) {
+            
+            process_table[i].state = PROCESS_STATE_NEW;
+            process_table[i].prog = executable;
+            pid = process_table[i].pid;
+            break;
+        }
+    }
+
+    if (pid < 0) {
+        // the process table is full, so we add to the que
+        sleepq_add(&process_table);
+        spinlock_release(&process_table_slock);
+        thread_switch();
+        // a process was terminated, so we retry.
+        return add_proc(executable);
+    }
+
+    spinlock_release(&process_table_slock);
+    return pid;
 }
 
 process_id_t process_spawn(const char *executable) {
     // create new process
-    process_control_block_t* new_proc = add_proc();
-    
-    new_proc = new_proc;
+    int new_proc_pid = add_proc(executable);
+    int tid = thread_create(&process_start, new_proc_pid);
 
-    executable = executable;
-    //process_start(executable);
+    thread_run(tid);
 
-    return 0; /* Dummy */
+    return new_proc_pid;
 }
 
 /* Stop the process and the thread it runs in. Sets the return value as well */
 void process_finish(int retval) {
-    retval=retval;
-    KERNEL_PANIC("Not implemented.");
+
+    KERNEL_ASSERT(retval > 0);
+
+    thread_table_t* current_thread = thread_get_current_thread_entry();
+    int pid = current_thread->process_id;
+
+    process_table[pid].state = PROCESS_STATE_ZOMBIE;
+    process_table[pid].exitcode = retval;
+
+    // free ram
+    vm_destroy_pagetable(current_thread->pagetable);
+    current_thread->pagetable = NULL;
+
+    sleepq_wake_all(&process_table);
+
+    thread_finish();
 }
 
 int process_join(process_id_t pid) {
-    pid=pid;
-    KERNEL_PANIC("Not implemented.");
-    return 0; /* Dummy */
+
+    _interrupt_disable();
+
+    spinlock_acquire(&process_table_slock);
+
+    sleepq_add(&process_table);
+
+    spinlock_release(&process_table_slock);
+
+    thread_switch();
+    
+    _interrupt_enable();
+
+    if (process_table[pid].state == PROCESS_STATE_ZOMBIE) {
+        return process_table[pid].exitcode;
+    }
+    return -1;
 }
 
 process_id_t process_get_current_process(void)

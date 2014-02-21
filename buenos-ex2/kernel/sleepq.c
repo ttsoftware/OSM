@@ -120,16 +120,16 @@ void sleepq_add(void *resource)
 
     /* Add the current thread to the end of the sleepqueue */
     if (sleepq_hashtable[hash] <= 0) {
-	/* hashtable entry empty */
-	sleepq_hashtable[hash] = my_tid;
+		/* hashtable entry empty */
+		sleepq_hashtable[hash] = my_tid;
     } else {
-	TID_t prev;
-	/* hashtable entry nonempty, chain to end of linked list */
-	prev = sleepq_hashtable[hash];
-	while (thread_table[prev].next > 0) {
-	    prev = thread_table[prev].next;
-	}
-	thread_table[prev].next = my_tid;
+		TID_t prev;
+		/* hashtable entry nonempty, chain to end of linked list */
+		prev = sleepq_hashtable[hash];
+		while (thread_table[prev].next > 0) {
+		    prev = thread_table[prev].next;
+		}
+		thread_table[prev].next = my_tid;
     }
 
     spinlock_release(&sleepq_slock);

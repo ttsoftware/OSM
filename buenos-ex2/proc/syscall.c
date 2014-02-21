@@ -36,6 +36,9 @@
 #include "kernel/cswitch.h"
 #include "proc/syscall.h"
 #include "kernel/halt.h"
+#include "kernel/exec.h"
+#include "kernel/join.h"
+#include "kernel/exit.h"
 #include "kernel/panic.h"
 #include "lib/libc.h"
 #include "kernel/assert.h"
@@ -78,7 +81,7 @@ int syscall_read(uint32_t fd, char *s, int len)
  */
 void syscall_handle(context_t *user_context)
 {
-    /* When a syscall is executed in userland, register a0 contains
+    /* When a syscall is executed in uaserland, register a0 contains
      * the number of the syscall. Registers a1, a2 and a3 contain the
      * arguments of the syscall. The userland code expects that after
      * returning from the syscall instruction the return value of the
@@ -98,6 +101,17 @@ void syscall_handle(context_t *user_context)
         case SYSCALL_READ:
             user_context->cpu_regs[MIPS_REGISTER_V0] =
                 syscall_read(A1, (char *)A2, A3);
+            break;
+        case SYSCALL_EXEC:
+            user_context->cpu_regs[MIPS_REGISTER_V0] =
+                syscall_exec((char *) A1);
+            break;
+        case SYSCALL_JOIN:
+            user_context->cpu_regs[MIPS_REGISTER_V0] =
+                syscall_join(A1);
+            break;
+        case SYSCALL_EXIT:
+            syscall_exit(A1);
             break;
         default:
             KERNEL_PANIC("Unhandled system call\n");
