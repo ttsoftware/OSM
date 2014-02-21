@@ -217,6 +217,7 @@ process_id_t process_spawn(const char *executable) {
     
     new_proc = new_proc;
 
+    executable = executable;
     process_start(executable);
 
     return 0; /* Dummy */
