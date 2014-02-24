@@ -1,0 +1,57 @@
+\documentclass[12pt,a4paper,danish]{article}
+\usepackage [utf8]{inputenc}
+\usepackage [danish]{babel}
+\usepackage [T1]{fontenc}
+\usepackage {amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [top=3.4cm, bottom=2cm, left=3cm, right=3cm] {geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pgfkeys}
+\titleformat{\section}[block]{\large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries\filcenter}{}{1em}{}
+\setcounter{secnumdepth}{0}
+\usepackage{pgfgantt}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usetikzlibrary{positioning,shapes, shadows, arrows}\usepackage{tikz}
+\usepackage{url}
+\linespread{1.2}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[L]{G1}
+\fancyhead[C]{OSM}
+\fancyhead[R]{February 17 2014}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{\fill}
+    \begin{center}
+      {\Huge Operating systems and multiprogramming}\\[0.7cm]
+      {\huge G-assignment 1}\\[0.7cm]
+      {\large Alexander Worm Olsen - bdj816}\\[0.4cm]
+      {\large Allan Martin Nielsen - jcl187}\\[0.4cm]
+      {\large Troels Thompsen - qvw203}\\[0.4cm]
+      {\small February 17 2014}\\[0.3cm] 
+      {\small Departmen of Computer Science}\\
+      {\small University of Copenhagen}
+    \end{center}
+    \vspace*{\fill}
+\end{titlepage}
+
+\section{Buenos system calls for basic I/O}
+We were asked to implement the functionality of the two system calls; read and write. In order to do this several changes to Buenos had to be made, including the kernel and procedures. In the folder \textit{proc} the file \textit{syscall.c} has been changed in order to implement the two system calls. These system calls vary from the one already implemented, halt, because read and write expects function arguments. Therefore we had to get these from the mips registers a1, a2 and a3, and pass them as function arguments to the functions.\\\\
+In the kernel of Buenos we have included \textit{read.c, write.c, read.h} \& \textit{write.h}. The header files are inspired from the one of halt, while the actual code for the two system calls are inspired by the testconsole from \textit{main.c}. The write function is straight forward using gcd to write from the buffer and into the console. We have included several kernel asserts in order to make sure no unexpected errors occur.
+
+Our implementation of read is almost as straight forward as the write. Only here we have made use of a while loop in order to allow several character click for the user. This while loop is controlled by the max byte length, which is given as input.
+During our while loop we increment our buffer which prevent previous input to be overwritten.
+
+\subsection{Test of read and write}
+In our buenos archive we have included a \textit{readwrite.c} test file. This file tests the functionality of both read and write.  While running the test the user is supposed to enter 9 digits, which will be read by our syscall\_read() and put into the buffer. Afterwards the syscall\_write() will write from the buffer what characters the user gave as input.
+
+At last a new buffer is initialised and characters are stored in this automatically which is afterwards written to the console.
+
+\end{document}

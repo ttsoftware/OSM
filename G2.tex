@@ -1,0 +1,63 @@
+\documentclass[12pt,a4paper,danish]{article}
+\usepackage [utf8]{inputenc}
+\usepackage [danish]{babel}
+\usepackage [T1]{fontenc}
+\usepackage {amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [top=3.4cm, bottom=2cm, left=3cm, right=3cm] {geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pgfkeys}
+\titleformat{\section}[block]{\large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries\filcenter}{}{1em}{}
+\setcounter{secnumdepth}{0}
+\usepackage{pgfgantt}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usetikzlibrary{positioning,shapes, shadows, arrows}\usepackage{tikz}
+\usepackage{url}
+\linespread{1.2}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[L]{G2}
+\fancyhead[C]{OSM}
+\fancyhead[R]{February 24 2014}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{\fill}
+    \begin{center}
+      {\Huge Operating systems and multiprogramming}\\[0.7cm]
+      {\huge G-assignment 2}\\[0.7cm]
+      {\large Alexander Worm Olsen - bdj816}\\[0.4cm]
+      {\large Allan Martin Nielsen - jcl187}\\[0.4cm]
+      {\large Troels Thompsen - qvw203}\\[0.4cm]
+      {\small February 24 2014}\\[0.3cm] 
+      {\small Department of Computer Science}\\
+      {\small University of Copenhagen}
+    \end{center}
+    \vspace*{\fill}
+\end{titlepage}
+
+\section{Types and functions for userland processes}
+First of we were to define a data structure to represent a userland process. To do this we used the already implemented datastructure, \textit{process\_control\_block\_t}, in \textit{process.h}, and expanded this with a state and id. Later on we found out, that we were in need of the name of the process because we changed the function \textit{process\_start} (see below) and the exitcode which was to be returned when calling join.
+
+The possible states of a function is defined in \textit{process.h} as well, these are chosen with inspiration from the book and the assignment description.\\\\
+When the data structure was defined we moved on to the implementation of the helper functions. These are found in \textit{process.c} and include a process\_spawn, process\_join, procces\_finish and process\_init. 
+
+The process\_init is straightforward, we initialise a process table with all its entries set to process\_state\_dead. When we are to add processes to this table we use the process\_spawn. This function calls yet another helper function; add\_proc. In our add\_proc we run through the process table looking for an element with a state of dead. If this exist we insert the new element, otherwise our process table is full and we therefore add it to a sleep queue, which is awoken when processes are joined together.
+
+When the new process is inserted we make a call to process\_start within the spawn function. This is called with the process' id, and in order to change the already implemented process\_start function we therefore had to add the executable/process name to our data structure and fetch this in process\_start.\\\\
+
+\section{System calls for user-process control}
+
+
+\section{Tests}
+In order to test the functionality of our system calls and related user processes. We've used the hand-out tests \textit{exec.c}  and \textit{hw.c}. These test files can be used in order to see if the functionality of one userland process invoking another userland process works. In this way spawn, finish, and join is required, and therefore the two files allows us to make sure all of our implementations works.
+
+We have chosen not to make a test file for each possible error, e.g. a negative return value of join on errors etc.
+
+\end{document}
