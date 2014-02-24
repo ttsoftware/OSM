@@ -196,6 +196,9 @@ void process_start(uint32_t pid)
     KERNEL_PANIC("thread_goto_userland failed.");
 }
 
+/*
+ * Initialise the process table with entries of PROCCES_STATE_DEAD
+ */
 void process_init() {
     spinlock_reset(&process_table_slock);
     for (int i = 0; i < PROCESS_MAX_PROCESSES; i++) {      
@@ -245,7 +248,10 @@ process_id_t process_spawn(const char *executable) {
     return new_proc_pid;
 }
 
-/* Stop the process and the thread it runs in. Sets the return value as well */
+/* 
+ * Stop the process and the thread it runs in. Sets the return value as well and wakes 
+ * all waiting processes in the sleep queue 
+ */
 void process_finish(int retval) {
 
     KERNEL_ASSERT(retval > 0);
@@ -265,6 +271,9 @@ void process_finish(int retval) {
     thread_finish();
 }
 
+/*
+ * Adds a process to be joined to a sleep queue until the appropriate process has finished
+ */
 int process_join(process_id_t pid) {
 
     _interrupt_disable();

@@ -57,6 +57,7 @@ int add_proc(const char* executable);
 #define PROCESS_STATE_WAITING 3
 #define PROCESS_STATE_NEW 4
 
+/* The data structue for userland processes */
 typedef struct _process_control_block_t {
     process_id_t pid;
     int state;

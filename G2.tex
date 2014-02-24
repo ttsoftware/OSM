@@ -21,11 +21,13 @@
 \linespread{1.2}
 \usepackage{fancyhdr}
 \pagestyle{fancyplain}
+\usepackage{listings}
 \fancyhead[L]{G2}
 \fancyhead[C]{OSM}
 \fancyhead[R]{February 24 2014}
 
 \begin{document}
+\lstset{language=C} 
 
 \begin{titlepage}
     \vspace*{\fill}
@@ -43,19 +45,53 @@
 \end{titlepage}
 
 \section{Types and functions for userland processes}
-First of we were to define a data structure to represent a userland process. To do this we used the already implemented datastructure, \textit{process\_control\_block\_t}, in \textit{process.h}, and expanded this with a state and id. Later on we found out, that we were in need of the name of the process because we changed the function \textit{process\_start} (see below) and the exitcode which was to be returned when calling join.
+First of we were to define a data structure to represent a userland process. To do this we used the already implemented datastructure, \textit{process\_control\_block\_t}, in \textit{process.h}, and expanded this with a state and id. Later on we found out, that we were in need of the name of the process because we changed the function \textit{process\_start} (see below) and the exitcode which was to be returned when calling join. This is shown in listing 1.
+\begin{lstlisting}[caption = Datastructe and states for a userland process.]
+/* Process states */
+#define PROCESS_STATE_DEAD -42
+#define PROCESS_STATE_ZOMBIE 0
+#define PROCESS_STATE_RUNNING 1
+#define PROCESS_STATE_READY 2
+#define PROCESS_STATE_WAITING 3
+#define PROCESS_STATE_NEW 4
+
+/* The data structue for userland processes */
+typedef struct _process_control_block_t {
+    process_id_t pid;
+    int state;
+    const char* prog;
+    int exitcode;
+} process_control_block_t;
+\end{lstlisting}
 
 The possible states of a function is defined in \textit{process.h} as well, these are chosen with inspiration from the book and the assignment description.\\\\
 When the data structure was defined we moved on to the implementation of the helper functions. These are found in \textit{process.c} and include a process\_spawn, process\_join, procces\_finish and process\_init. 
 
-The process\_init is straightforward, we initialise a process table with all its entries set to process\_state\_dead. When we are to add processes to this table we use the process\_spawn. This function calls yet another helper function; add\_proc. In our add\_proc we run through the process table looking for an element with a state of dead. If this exist we insert the new element, otherwise our process table is full and we therefore add it to a sleep queue, which is awoken when processes are joined together.
+The process\_init is straightforward, we initialise a process table with all its entries set to process\_state\_dead. When we are to add processes to this table we use the process\_spawn. This function calls yet another helper function; add\_proc. In our add\_proc we run through the process table looking for an element with a state of dead. If this exist we insert the new element, otherwise our process table is full and we therefore add it to a sleep queue, which is awoken when processes are joined together. The run through the process table is shown in listing 2.
+\newpage
+\begin{lstlisting}[caption=Running through the process table inserting a new process.]
+    for (int i = 0; i < PROCESS_MAX_PROCESSES; i++) {
+        if (process_table[i].state == PROCESS_STATE_DEAD) {
+            
+            process_table[i].state = PROCESS_STATE_NEW;
+            process_table[i].prog = executable;
+            pid = process_table[i].pid;
+            break;
+        }
+    }
+\end{lstlisting}
 
-When the new process is inserted we make a call to process\_start within the spawn function. This is called with the process' id, and in order to change the already implemented process\_start function we therefore had to add the executable/process name to our data structure and fetch this in process\_start.\\\\
+When the new process is inserted we make a call to process\_start within the spawn function. This is called with the process' id, and in order to change the already implemented process\_start function we therefore had to add the executable/process name to our data structure and fetch this in process\_start. See the code snippet in listing 3 for the main changes to process\_start.
+\begin{lstlisting}[caption= Changes made to process\_start]
+void process_start(uint32_t pid)
+{
+    const char* executable = process_table[pid].prog;
+\end{lstlisting}
 The process\_finish is also quite straight forward, we use the already implemented function, thread\_get\_current\_thread\_entry to find the appropriate process to be finished and afterwards we change the state to zombie and invoke wake to our sleep queue.
 
 The process\_join helper function is inspired by the section of roadmap to buenos explaining the sleep queue, and it goes through the implementation of this step by step.
 
-Please note that we've also changed the \textit{main.c} in the init folder by calling process\_init. This we've have chosen to do, because the process table has to be initialised before any user process calls, and this was possible in \textiti{main.c}.
+Please note that we've also changed the \textit{main.c} in the init folder by calling process\_init. This we've have chosen to do, because the process table has to be initialised before any user process calls, and this was possible in \textit{main.c}.
 
 \section{System calls for user-process control}
 Our implementation of the system calls join, exec and exit is quite straight forward. The implementations are found in the kernel by \textit{exec.c, exec.h, join.c} etc. and in the file \textit{syscall.c} in the folder proc.
