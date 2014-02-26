@@ -3,7 +3,9 @@
 #include <stdint.h>
 #include "stack.h"
 
-int main(void) {
+/* Det kaster mærkelige fejl jeg ikke har fået rettet */
+
+/* int main(void) {
     stack_t stack;
     
     stack_init(&stack);
@@ -11,4 +13,4 @@ int main(void) {
     
     
     
-}
+} */
