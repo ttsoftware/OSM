@@ -1,16 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <pthread.h>
 #include "stack.h"
 
-/* Det kaster mærkelige fejl jeg ikke har fået rettet */
+int main(void) {
 
-/* int main(void) {
-    stack_t stack;
+	struct stack_t *stack = (struct stack_t *) malloc (sizeof (struct stack_t));
     
-    stack_init(&stack);
-    
-    
-    
-    
-} */
+    stack_init(stack);
+
+/*
+    pthread_t* worker_1;
+    pthread_t* worker_2;
+
+    pthread_create(worker_1, NULL);
+    pthread_create(worker_2, NULL);
+*/
+    // Hvorfor skal vores testprogram være så fucking kompliceret?
+}
