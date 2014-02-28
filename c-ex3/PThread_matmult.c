@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
+#include "stack.h"
 
 #define DEFAULT_SIZE 100
 
@@ -70,6 +71,10 @@ int main(int argc, char* argv[]) {
   ttask_t *tasks, *t;
 
   char* num_end;
+  
+  stack_ty stack;
+  
+  stack_init(&stack); 
 
   /* Find out which size to compute with. */
   if (argc > 1) {
@@ -141,7 +146,10 @@ int main(int argc, char* argv[]) {
     t->a_length = size;
     t->b_columns = size;
     t->row_result = r + i * size;
-
+    
+    stack_push(&stack, &t);
+    
+    
     if (pthread_create(&threads[i], NULL, rowmult, t) != 0) {
       perror("pthread_create");
       free(matrices);
