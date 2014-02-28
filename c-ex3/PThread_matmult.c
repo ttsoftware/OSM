@@ -22,6 +22,15 @@ typedef struct {
   double *row_result;
 } ttask_t;
 
+/* Global stack to hold tasks */ 
+stack_ty stack;
+
+/* Variable condition */
+pthread_cond_t wait_cond;
+
+/* Mutex lock to be used for condition variable */
+pthread_mutex_t lock;
+
 /* Zero the result row of doubles in memory, compute dot product of row A with
  * all columns of B, return.
  */
@@ -54,6 +63,16 @@ void output_square_matrix(double *m, int size) {
   }
 }
 
+/* Putting our threads to sleep, waiting for work to be done eg. tasks and run rowmult */
+void* sleep_work_threads() {
+    pthread_cond_wait(&wait_cond, &lock);
+    while (!stack_empty(&stack)) {
+    rowmult(stack_pop(&stack));
+    }
+    pthread_exit(NULL);
+    return NULL;
+}
+
 /* Main program: Fill two matrices (randomly or with particular patterns; for
  * instance diagonals to "mirror" a matrix or some blocks of it), then create
  * one thread per row to multiply. Join all threads, then output the matrix (or
@@ -64,6 +83,10 @@ void output_square_matrix(double *m, int size) {
 int main(int argc, char* argv[]) {
   int i, j;
   int size;
+  int num_threads;
+  
+  /* Specifying number of threads to be runned */
+  num_threads = 10;
 
   double *matrices, *a, *b, *r;
 
@@ -72,9 +95,14 @@ int main(int argc, char* argv[]) {
 
   char* num_end;
   
-  stack_ty stack;
-  
+  /* initialising stack */
   stack_init(&stack); 
+  
+  /* Conditional variable to be used for our waiting threads */
+  pthread_cond_init(&wait_cond, NULL);
+  
+  /* Mutex lock */
+  pthread_mutex_init(&lock, NULL);
 
   /* Find out which size to compute with. */
   if (argc > 1) {
@@ -118,6 +146,7 @@ int main(int argc, char* argv[]) {
     free(threads);
     exit(EXIT_FAILURE);
   }
+  
 
   /* Fill matrices with values. a is random, b is diagonal. */
   srand(time(NULL)); /* A very bad RNG, but standard */
@@ -137,7 +166,12 @@ int main(int argc, char* argv[]) {
     printf("\nMatrix B (diagonal):\n");
     output_square_matrix(b, size);
   }
-
+  
+  /* create a given number of waiting threads */
+  for(i = 0; i < num_threads; i++) {
+      pthread_create(&threads[i], NULL, sleep_work_threads, NULL);
+  } 
+  
   /* Start the threads. */
   for (i = 0; i < size; i++) {
     t = &tasks[i];
@@ -147,16 +181,19 @@ int main(int argc, char* argv[]) {
     t->b_columns = size;
     t->row_result = r + i * size;
     
+    /* Pushing the tasks to the stack */
     stack_push(&stack, &t);
     
+    /* wake thread waiting for this task  */
+    pthread_cond_broadcast(&wait_cond); 
     
+    /* 
     if (pthread_create(&threads[i], NULL, rowmult, t) != 0) {
       perror("pthread_create");
       free(matrices);
       free(threads);
       free(tasks);
-      exit(EXIT_FAILURE);
-    }
+      exit(EXIT_FAILURE); */
   }
 
   /* Wait for the threads to finish. */
