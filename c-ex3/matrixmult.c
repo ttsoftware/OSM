@@ -6,9 +6,9 @@
 
 int main(void) {
 
-	struct stack_t *stack = (struct stack_t *) malloc (sizeof (struct stack_t));
+	struct stack_ty *stack = (struct stack_ty *) malloc (sizeof (struct stack_ty));
     
-    stack_init(stack);
+    stack_init(stack); 
 
 /*
     pthread_t* worker_1;

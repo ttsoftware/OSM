@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
+#include "stack.h"
 
 #define DEFAULT_SIZE 100
 
@@ -20,6 +21,15 @@ typedef struct {
     int a_length, b_columns;
     double *row_result;
 } ttask_t;
+
+/* Global stack to hold tasks */ 
+stack_ty stack;
+
+/* Variable condition */
+pthread_cond_t wait_cond;
+
+/* Mutex lock to be used for condition variable */
+pthread_mutex_t lock;
 
 /* Zero the result row of doubles in memory, compute dot product of row A with
  * all columns of B, return.
@@ -51,6 +61,16 @@ void output_square_matrix(double *m, int size) {
         }
         putchar('\n');
     }
+}
+
+/* Putting our threads to sleep, waiting for work to be done eg. tasks and run rowmult */
+void* sleep_work_threads() {
+    pthread_cond_wait(&wait_cond, &lock);
+    while (!stack_empty(&stack)) {
+    rowmult(stack_pop(&stack));
+    }
+    pthread_exit(NULL);
+    return NULL;
 }
 
 /* Main program: Fill two matrices (randomly or with particular patterns; for
@@ -133,35 +153,54 @@ int main(int argc, char* argv[]) {
         output_square_matrix(b, size);
     }
 
+    /* If size is small, output matrices. */
+    if (size < 20) {
+      printf("\nMatrix A:\n");
+      output_square_matrix(a, size);
+      printf("\nMatrix B (diagonal):\n");
+      output_square_matrix(b, size);
+    }
+    
+    /* create a given number of waiting threads */
+    for(i = 0; i < num_threads; i++) {
+        pthread_create(&threads[i], NULL, sleep_work_threads, NULL);
+    } 
+  
     /* Start the threads. */
     for (i = 0; i < size; i++) {
-        t = &tasks[i];
-        t->row_a = a + i * size;
-        t->matrix_b = b;
-        t->a_length = size;
-        t->b_columns = size;
-        t->row_result = r + i * size;
-
-        if (pthread_create(&threads[i], NULL, rowmult, t) != 0) {
-            perror("pthread_create");
-            free(matrices);
-            free(threads);
-            free(tasks);
-            exit(EXIT_FAILURE);
-        }
+      t = &tasks[i];
+      t->row_a = a + i * size;
+      t->matrix_b = b;
+      t->a_length = size;
+      t->b_columns = size;
+      t->row_result = r + i * size;
+      
+      /* Pushing the tasks to the stack */
+      stack_push(&stack, &t);
+      
+      /* wake thread waiting for this task  */
+      pthread_cond_broadcast(&wait_cond); 
+      
+      /* 
+      if (pthread_create(&threads[i], NULL, rowmult, t) != 0) {
+        perror("pthread_create");
+        free(matrices);
+        free(threads);
+        free(tasks);
+        exit(EXIT_FAILURE); */
     }
 
     /* Wait for the threads to finish. */
     for(i = 0; i < size; i++) {
-        pthread_join(threads[i], NULL);
-        putchar('.');
+      pthread_join(threads[i], NULL);
+      putchar('.');
     }
     putchar('\n');
 
     /* If size is small, output result matrix. */
     if (size < 20) {
-        printf("\nResult:\n");
-        output_square_matrix(r, size);
+      printf("\nResult:\n");
+      output_square_matrix(r, size);
     }
     printf("\nFinished!\n");
 

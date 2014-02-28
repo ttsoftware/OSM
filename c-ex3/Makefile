@@ -1,4 +1,4 @@
-SOURCES  := matrixmult.c
+SOURCES  := Pthread_matmult.c
 
 LIBS	 := stack.c
 
