@@ -6,7 +6,8 @@ make clean -C tests/
 make -C tests/
 rm fyams.harddisk
 util/tfstool create fyams.harddisk 2048 arkimedes
-# util/tfstool write fyams.harddisk tests/exec exec
-# util/tfstool write fyams.harddisk tests/hw hw
-# fyams-sim buenos 'initprog=[arkimedes]exec'
+util/tfstool write fyams.harddisk tests/barrier barrier
+util/tfstool write fyams.harddisk tests/prog0 prog0
+util/tfstool write fyams.harddisk tests/prog1 prog1
+fyams-sim buenos 'initprog=[arkimedes]barrier'
 
