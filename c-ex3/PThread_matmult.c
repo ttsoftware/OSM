@@ -32,9 +32,9 @@ stack_ty stack;
 void* rowmult(void *arg) {
   int i, j;
   ttask_t *t;
-
+  
   t = (ttask_t*) arg;
-
+  
   for (j = 0; j < t->b_columns; j++) {
     t->row_result[j] = 0.0;
   }
@@ -60,7 +60,9 @@ void output_square_matrix(double *m, int size) {
 void* do_task(void *task) {
     while(task) {
         rowmult(task);
+        if(stack_top(&stack) != 0){
         task = stack_pop(&stack);
+    }
     }
     return NULL;
 }
@@ -162,10 +164,11 @@ int main(int argc, char* argv[]) {
   }
   
       for (i = 0; i < NUM_THREADS; i++) {
-          pthread_create(&threads[i], NULL, do_task, stack_pop(&stack));
           if (stack_empty(&stack)) {
               break;
           }
+          pthread_create(&threads[i], NULL, do_task, stack_pop(&stack));
+          pthread_join(threads[i],NULL);
       }
 
   /* If size is small, output result matrix. */
