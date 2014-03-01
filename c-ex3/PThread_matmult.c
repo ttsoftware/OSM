@@ -164,22 +164,12 @@ int main(int argc, char* argv[]) {
     stack_push(&stack, t);
   }
   
- /*  while(!stack_empty(&stack)) { */
       for (i = 0; i < NUM_THREADS; i++) {
           pthread_create(&threads[i], NULL, do_task, stack_pop(&stack));
           if (stack_empty(&stack)) {
               break;
           }
       }
-/*      for (j = 0; j < NUM_THREADS; j++) {
-          if (j == i) {
-              break;
-          }
-          pthread_join(threads[j],NULL);
-          putchar('.');
-      }
-      putchar('\n');
-      }*/
 
   /* If size is small, output result matrix. */
   if (size < 20) {
