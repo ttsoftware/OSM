@@ -15,7 +15,7 @@ int stack_empty(stack_ty* stack) {
     return stack->size == -1;
 }
 
-void* stack_size(stack_ty* stack) {
+void* stack_top(stack_ty* stack) {
     return stack->data[stack->size];
 }
 
@@ -30,8 +30,8 @@ void* stack_pop(stack_ty* stack) {
         return NULL;
     }
 
-    stack->size--;
     void* element = stack->data[stack->size];
+    stack->size--;
 
     if (stack->size == STACK_MAX_SIZE-1) {
         // something is going to be pop'ed, so we can now signal to push
