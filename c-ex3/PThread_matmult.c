@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
       }
 
   /* If size is small, output result matrix. */
-  if (size < 20) {
+  if (size < 50) {
     printf("\nResult:\n");
     output_square_matrix(r, size);
   }
