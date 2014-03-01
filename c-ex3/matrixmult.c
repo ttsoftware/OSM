@@ -16,6 +16,5 @@ int main(void) {
 
     pthread_create(worker_1, NULL);
     pthread_create(worker_2, NULL);
-*/
-    // Hvorfor skal vores testprogram være så fucking kompliceret?
+    */
 }

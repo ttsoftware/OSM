@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
-#include "stack.h"
 
 #define DEFAULT_SIZE 100
 #define NUM_THREADS 10
@@ -57,7 +56,6 @@ void output_square_matrix(double *m, int size) {
     putchar('\n');
   }
 }
-
 void* do_task(void *task) {
     while(task) {
         rowmult(task);
@@ -76,7 +74,6 @@ void* do_task(void *task) {
 int main(int argc, char* argv[]) {
   int i, j;
   int size;
-  
   double *matrices, *a, *b, *r;
 
   pthread_t *threads;
@@ -85,7 +82,7 @@ int main(int argc, char* argv[]) {
   char* num_end;
   
   /* initialising stack */
-  stack_init(&stack); 
+  stack_init(&stack);
 
   /* Find out which size to compute with. */
   if (argc > 1) {
@@ -130,7 +127,6 @@ int main(int argc, char* argv[]) {
     free(threads);
     exit(EXIT_FAILURE);
   }
-  
 
   /* Fill matrices with values. a is random, b is diagonal. */
   srand(time(NULL)); /* A very bad RNG, but standard */
@@ -150,7 +146,7 @@ int main(int argc, char* argv[]) {
     printf("\nMatrix B (diagonal):\n");
     output_square_matrix(b, size);
   }
-  
+
   /* Start the threads. */
   for (i = 0; i < size; i++) {
     t = &tasks[i];

@@ -1,6 +1,8 @@
-SOURCES  := Pthread_matmult.c
+SOURCES  := PThread_matmult.c
 
 LIBS	 := stack.c dlist.c
+
+LIBS	 := stack.h dlist.h
 
 OBJECTS  := $(patsubst %.c, %.o, $(SOURCES))
 TARGETS  := $(patsubst %.o, %, $(OBJECTS))
