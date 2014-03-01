@@ -1,14 +1,16 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "stack.h"
+#include "dlist.h"
+#include <stdio.h>
 
 pthread_mutex_t lock;
-pthread_cond_t push_cond;
 
 void stack_init(stack_ty* stack) {
     pthread_mutex_init(&lock, NULL);
-    pthread_cond_init(&push_cond, NULL);
     stack->size = -1;
+    void* data = 0;
+    insert((&stack->datalist),data,0);
 }
 
 int stack_empty(stack_ty* stack) {
@@ -16,7 +18,7 @@ int stack_empty(stack_ty* stack) {
 }
 
 void* stack_top(stack_ty* stack) {
-    return stack->data[stack->size];
+    return stack->datalist.head;
 }
 
 /* 
@@ -30,14 +32,9 @@ void* stack_pop(stack_ty* stack) {
         return NULL;
     }
 
-    void* element = stack->data[stack->size];
+    void* element;
+    element = extract(&(stack->datalist),0);
     stack->size--;
-
-    if (stack->size == STACK_MAX_SIZE-1) {
-        // something is going to be pop'ed, so we can now signal to push
-        // pthread_cond_signal(push_cond);
-        pthread_cond_broadcast(&push_cond); 
-    }
 
     pthread_mutex_unlock(&lock);
 
@@ -47,13 +44,8 @@ void* stack_pop(stack_ty* stack) {
 int stack_push(stack_ty* stack, void* data) {
     pthread_mutex_lock(&lock);
 
-    if (stack->size == STACK_MAX_SIZE-1) {
-        // if we encounter a full stack, we want to wait.
-        pthread_cond_wait(&push_cond, &lock);
-    } 
-
     stack->size++;
-    stack->data[stack->size] = data;
+    insert((&stack->datalist),data,0);
 
     pthread_mutex_unlock(&lock);
 

@@ -1,10 +1,10 @@
+#include "dlist.h"
+
 #ifndef STACK_H
 #define STACK_H
 
-#define STACK_MAX_SIZE 1024
-
 typedef struct stack_ty {
-  void* data[STACK_MAX_SIZE];
+  dlist datalist;
   int size;
 } stack_ty;
 
