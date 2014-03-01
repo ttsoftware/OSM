@@ -1,4 +1,4 @@
-SOURCES := PThread_matmult.c
+SOURCES := Pthread_matmult.c
 
 LIBS	:= stack.c dlist.c
 

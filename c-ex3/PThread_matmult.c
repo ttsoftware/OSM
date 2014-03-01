@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
+#include "stack.h"
 
 #define DEFAULT_SIZE 100
 #define NUM_THREADS 10
