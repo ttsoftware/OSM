@@ -3,6 +3,8 @@
 #ifndef STACK_H
 #define STACK_H
 
+/* Changed the type of data to use our dlist from G1, this is done
+   in order to implement a dynamic stack, and renamed it datalist. */
 typedef struct stack_ty {
   dlist datalist;
   int size;

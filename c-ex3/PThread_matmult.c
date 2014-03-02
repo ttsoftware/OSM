@@ -13,6 +13,7 @@
 #include "stack.h"
 
 #define DEFAULT_SIZE 100
+/* Number of threads to be created */
 #define NUM_THREADS 10
 
 /* Data structure to drive a thread */
@@ -57,6 +58,8 @@ void output_square_matrix(double *m, int size) {
     putchar('\n');
   }
 }
+
+/* Helper function to reuse the same threads over and over. */
 void* do_task(void *task) {
     while(task) {
         rowmult(task);
@@ -163,13 +166,16 @@ int main(int argc, char* argv[]) {
     stack_push(&stack, t);
   }
   
-      for (i = 0; i < NUM_THREADS; i++) {
-          if (stack_empty(&stack)) {
-              break;
-          }
-          pthread_create(&threads[i], NULL, do_task, stack_pop(&stack));
-          pthread_join(threads[i],NULL);
-      }
+  /* Creating the specified number of threads, and caling the helper function
+   * do_task which is to run the rowmult. When the threads a finished, they
+   * are joined together. */
+  for (i = 0; i < NUM_THREADS; i++) {
+    if (stack_empty(&stack)) {
+       break;
+    }
+    pthread_create(&threads[i], NULL, do_task, stack_pop(&stack));
+    pthread_join(threads[i],NULL);
+    }
 
   /* If size is small, output result matrix. */
   if (size < 50) {

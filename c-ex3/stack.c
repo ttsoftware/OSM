@@ -4,8 +4,13 @@
 #include "dlist.h"
 #include <stdio.h>
 
+/* Mutex lock */
 pthread_mutex_t lock;
 
+/* Initialising the mutex lock, the stack size but also we insert a 0 in the stack
+ * This is due to the fact, that our implementation of the Dlist does not
+ * work when we only insert 2 elements and extract both of them, 
+ * therefore we've made this little 'hack'. */
 void stack_init(stack_ty* stack) {
     pthread_mutex_init(&lock, NULL);
     stack->size = -1;
@@ -13,17 +18,18 @@ void stack_init(stack_ty* stack) {
     insert((&stack->datalist),data,0);
 }
 
+/* Is the stack empty? */
 int stack_empty(stack_ty* stack) {
     return stack->size == -1;
 }
 
+/* Top of the stack */
 void* stack_top(stack_ty* stack) {
     return stack->datalist.head;
 }
 
-/* 
- * We want to synchronize pop, so concurrent access does not yield the same data element.
- */
+/* We want to synchronize pop, so concurrent access does not yield the same data element.
+ * hence the mutex lock. We use the extract from dlist to remove elements. */
 void* stack_pop(stack_ty* stack) {
     pthread_mutex_lock(&lock);
 
@@ -41,6 +47,7 @@ void* stack_pop(stack_ty* stack) {
     return element;
 }
 
+/* Synchronizing and therefore we make use of a mutex lock. */
 int stack_push(stack_ty* stack, void* data) {
     pthread_mutex_lock(&lock);
 
