@@ -1,0 +1,84 @@
+\documentclass[12pt,a4paper,danish]{article}
+\usepackage [utf8]{inputenc}
+\usepackage [danish]{babel}
+\usepackage [T1]{fontenc}
+\usepackage {amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [top=3.4cm, bottom=2cm, left=3cm, right=3cm] {geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pgfkeys}
+\titleformat{\section}[block]{\large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries\filcenter}{}{1em}{}
+\setcounter{secnumdepth}{0}
+\usepackage{pgfgantt}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usetikzlibrary{positioning,shapes, shadows, arrows}\usepackage{tikz}
+\usepackage{url}
+\linespread{1.2}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\pagestyle{fancyplain}
+\fancyhead[L]{G3}
+\fancyhead[C]{OSM}
+\fancyhead[R]{March 3 2014}
+
+\begin{document}
+\lstset{language=C} 
+
+\begin{titlepage}
+    \vspace*{\fill}
+    \begin{center}
+      {\Huge Operating systems and multiprogramming}\\[0.7cm]
+      {\huge G-assignment 3}\\[0.7cm]
+      {\large Alexander Worm Olsen - bdj816}\\[0.4cm]
+      {\large Allan Martin Nielsen - jcl187}\\[0.4cm]
+      {\large Troels Thompsen - qvw203}\\[0.4cm]
+      {\small March 3 2014}\\[0.3cm] 
+      {\small Department of Computer Science}\\
+      {\small University of Copenhagen}
+    \end{center}
+    \vspace*{\fill}
+\end{titlepage}
+
+\section{A thread-safe stack}
+We were asked to implement a thread-safe stack, e.g. it should allow concurrent access by different threads safely. The stack implementation is to be found in \textit{stack.c} and the hand-out interface is found in \textit{stack.h}.
+
+In the interface handed-out we changed the type of stacks data from an array to a double-linked-list, where we used our implementation from G1. This allowed our stack to be dynamic and therefore hold data of large matrices.
+
+The implementation of the functions allowed by our interface are straight forward. For our pop and push we used a mutex lock to ensure safe concurrent access, and then we popped and pushed using the extract and insert from the double-linked-list. These insert and extract are all done to the head of the stack, which gives a first in-last out implementation.
+
+Please note that in the initialisation of our stack (stack\_init()) we push a pointer to a '0' on the stack, this is done due to the fact, that our dlist implementation of our G1 does not work in the case where only 2 elements is inserted and then both extracted. The implementation and 'hack' is shown in listing 1.
+
+\begin{lstlisting}[caption=The stack\_init implementation]
+void stack_init(stack_ty* stack) {
+    pthread_mutex_init(&lock, NULL);
+    stack->size = -1;
+    void* data = 0;
+    insert((&stack->datalist),data,0);
+}
+\end{lstlisting}
+\subsection{Matrix multiplication using threads}
+In order to test the implementation of our thread-safe stack we were to implement a matrix multiplication program using a fixed number of threads. We've used the handed-out \textit{Pthread\_matmult.c} and modified it to use a fixed number of threads.
+
+We haven't changed much in the hand-out, in summary we added a fixed number of threads, e.g. 10. The tasks, each row, is pushed onto our thread-safe stack and then we've changed the Pthread creations to use a for-loop creating exactly the fixed number of threads and then each of these threads run a new helper function called do\_task with a popped task from the stack. This helper function makes sure the threads keep running until all the work is done and then the threads are joined. Below in listing 2 we've included our helper function, which is the essential code snippet for our threads.
+\begin{lstlisting}[caption=The helper function do\_task]
+void* do_task(void *task) {
+    while(task) {
+        rowmult(task);
+        if(stack_top(&stack) != 0){
+        task = stack_pop(&stack);
+    }
+    }
+    return NULL;
+}
+\end{lstlisting}
+
+\section{Userland semaphores}
+
+\subsection{Testing}
+
+\end{document}
