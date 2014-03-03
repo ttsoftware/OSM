@@ -6,6 +6,7 @@
 
 /* Mutex lock */
 pthread_mutex_t lock;
+pthread_cond_t pop_cond;
 
 /* Initialising the mutex lock, the stack size but also we insert a 0 in the stack
  * This is due to the fact, that our implementation of the Dlist does not
@@ -13,6 +14,7 @@ pthread_mutex_t lock;
  * therefore we've made this little 'hack'. */
 void stack_init(stack_ty* stack) {
     pthread_mutex_init(&lock, NULL);
+    pthread_cond_init(&pop_cond, NULL);
     stack->size = -1;
     void* data = 0;
     insert((&stack->datalist),data,0);
@@ -25,6 +27,7 @@ int stack_empty(stack_ty* stack) {
 
 /* Top of the stack */
 void* stack_top(stack_ty* stack) {
+    
     return stack->datalist.head;
 }
 
@@ -34,8 +37,8 @@ void* stack_pop(stack_ty* stack) {
     pthread_mutex_lock(&lock);
 
     if (stack->size == -1) {
-        // if we encounter empty stack, we want to throw error, or wait?
-        return NULL;
+       // pthread_cond_wait(&pop_cond,&lock); - didnt work
+        return 0;
     }
 
     void* element;
@@ -54,6 +57,8 @@ int stack_push(stack_ty* stack, void* data) {
     stack->size++;
     insert((&stack->datalist),data,0);
 
+    pthread_cond_broadcast(&pop_cond);
+    
     pthread_mutex_unlock(&lock);
 
     return 0;
