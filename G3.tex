@@ -78,7 +78,24 @@ void* do_task(void *task) {
 \end{lstlisting}
 
 \section{Userland semaphores}
+We were asked to implement the functionality of userland semaphores to Buenos. We've done this mainly in the proc folder with the two files \textit{semaphore.c} and \textit{semaphore.h}. We made the choice of implementing a table to hold all the userland semaphores where they could be mapped to kernel semaphores. Therefore we've implemented a usr\_sem\_init where we initialise the table.
+
+Our implementation of syscall\_sem\_open uses a lot of nesting and various conditions. This is due to the fact, that the name must be of valid length, the value can either mean a creation or a look-up. If the semaphore is to be created this is done by the code shown in listing 3.
+
+\begin{lstlisting}[caption=Creation of new userland semaphores]
+    for(i = 0; i < MAX_SEMAPHORES; i++) {
+        if(usr_sem_table[i].SId == -1) {
+            usr_sem_table[i].kernel_sem = semaphore_create(value);
+            usr_sem_table[i].SId = 0;
+            stringcopy(usr_sem_table[i].sem_name,name,MAX_NAME_SIZE);
+            return &(usr_sem_table[i]);
+        }
+\end{lstlisting}
+The implementation of vacate and procure is straight forward, first we find the semaphore in the table, and then we call the kernel semaphore functions.
+
+In the implementation of destroy we've tried to handle the various problems that might take place with a spinlock. 
 
 \subsection{Testing}
+In order to test the implemented userland semaphores we used the hand-out \textit{barrier.c, prog1.c, prog0.c}. We excluded a test file for the syscall\_sem\_destroy, this is mainly due to lack of time, but we tried to avoid synchronisation problems, although we havn't taken care of other threads already blocking it in the sleep queue because anything we tried just returned errors.
 
 \end{document}
