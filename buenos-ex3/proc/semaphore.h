@@ -2,11 +2,18 @@
 #define BUENOS_PROC_SEMAPHORE
 
 #include "lib/types.h"
+#include "kernel/semaphore.h"
+
+#define MAX_NAME_SIZE 50
 
 typedef struct {
-    char const* name;
+    char const* name[MAX_NAME_SIZE];
     int value;
+    int SId;
+    semaphore_t kernel_sem;
 } usr_sem_t;
+
+void usr_sem_init(void);
 
 usr_sem_t* syscall_sem_open(char const* name, int value);
 
