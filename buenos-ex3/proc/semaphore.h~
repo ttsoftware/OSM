@@ -7,7 +7,6 @@
 
 #define MAX_NAME_SIZE 50
 
-/* userland semaphore stucture */
 typedef struct {
     char sem_name[MAX_NAME_SIZE];
     int SId;
@@ -15,7 +14,6 @@ typedef struct {
     spinlock_t slock;
 } usr_sem_t;
 
-/* Initiliazing the userland semaphore table */
 void usr_sem_init(void);
 
 usr_sem_t* syscall_sem_open(char const* name, int value);
