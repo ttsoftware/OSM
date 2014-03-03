@@ -7,7 +7,6 @@ int main(void) {
   char line[BUFFER_SIZE];
 
   /* Open the semaphores. */
-  printf("HHHHHHHHHH\n");
   wait0 = syscall_sem_open("wait0", -1);
   wait1 = syscall_sem_open("wait1", -1);
   read_write_lock = syscall_sem_open("rwlock", -1);
