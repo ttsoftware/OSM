@@ -3,15 +3,19 @@
 #include "kernel/semaphore.h"
 #include "lib/libc.h"
 #include "kernel/assert.h"
+#include "kernel/interrupt.h"
+#include "kernel/sleepq.h"
 
 #define MAX_SEMAPHORES 128
 
 static usr_sem_t usr_sem_table[MAX_SEMAPHORES];
 
+static spinlock_t usr_sem_table_slock;
 
 void usr_sem_init(void){
     int i;
     
+    spinlock_reset(&usr_sem_table_slock);
     for(i = 0; i < MAX_SEMAPHORES; i++) {
         usr_sem_table[i].SId = -1;
     }
@@ -69,6 +73,11 @@ int syscall_sem_v(usr_sem_t* handle) {
 
 int syscall_sem_destroy(usr_sem_t* handle) {
     int i;
+
+    interrupt_status_t intr_status;
+
+    intr_status = _interrupt_disable();
+    spinlock_acquire(&handle->slock);
     
     semaphore_destroy(handle->kernel_sem);
     for(i = 0; i < MAX_SEMAPHORES; i++) {
@@ -76,6 +85,9 @@ int syscall_sem_destroy(usr_sem_t* handle) {
             usr_sem_table[i].SId = -1;        
         }
     }
+    
+    spinlock_release(&handle->slock);
+    _interrupt_set_state(intr_status);
     return 0;
 }
 
