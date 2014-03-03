@@ -13,6 +13,7 @@ int main(void) {
 
   /* Do work before barrier. */
   syscall_sem_p(read_write_lock);
+  printf("HHHHHHHHHH\n");
   readline(line, BUFFER_SIZE);
   printf("prog0: You wrote: %s\n", line);
   syscall_sem_v(read_write_lock);

@@ -7,10 +7,9 @@
 #define MAX_NAME_SIZE 50
 
 typedef struct {
-    char const* name[MAX_NAME_SIZE];
-    int value;
+    char sem_name[MAX_NAME_SIZE];
     int SId;
-    semaphore_t kernel_sem;
+    semaphore_t* kernel_sem;
 } usr_sem_t;
 
 void usr_sem_init(void);
