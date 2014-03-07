@@ -95,6 +95,9 @@ void tlb_modified_exception(void);
 void tlb_load_exception(void);
 void tlb_store_exception(void);
 
+/* FIND ENTRY AND SHIT */
+tlb_entry_t* vpn_lookup(unsigned int vpn, tlb_entry_t *entries);
+
 /* Forward declare pagetable_t (== struct pagetable_struct_t) */
 struct pagetable_struct_t;
 void tlb_fill(struct pagetable_struct_t *pagetable);

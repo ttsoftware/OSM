@@ -36,6 +36,7 @@
 
 #include "kernel/panic.h"
 #include "kernel/assert.h"
+#include "kernel/thread.h"
 #include "vm/tlb.h"
 #include "vm/pagetable.h"
 
@@ -51,7 +52,38 @@ void tlb_load_exception(void)
 
 void tlb_store_exception(void)
 {
-    KERNEL_PANIC("Unhandled TLB store exception");
+    tlb_exception_state_t tes;
+    _tlb_get_exception_state(&tes);
+
+    thread_table_t* current_thread = thread_get_current_thread_entry();
+    pagetable_t* pagetable = current_thread->pagetable;
+
+    kprintf("0x%8.8x 1\n", tes.badvpn2);
+
+    tlb_entry_t* entry = vpn_lookup(tes.badvpn2, pagetable->entries);
+    if (entry->D0 == 1) {
+        entry->VPN2--;
+        entry->D0 = 0;
+    }
+    else {
+        KERNEL_PANIC("Unhandled TLB store exception");    
+    }
+
+    _tlb_write_random(entry);
+    
+    entry->D0 = 1;
+
+    kprintf("0x%8.8x 2\n", entry->VPN2);
+}
+
+tlb_entry_t* vpn_lookup(unsigned int vpn2, tlb_entry_t *entries) {
+    for (int i = 0; i < PAGETABLE_ENTRIES; i++) {
+        // for some reason we subtract the dirty bit
+        if ((int)(entries[i].VPN2 - entries[i].D0) == (int)vpn2) {
+            return &(entries[i]);
+        }
+    }
+    return NULL;
 }
 
 /**
