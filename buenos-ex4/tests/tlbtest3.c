@@ -5,9 +5,6 @@ int main(void) {
 	// nooooo...
 	heap_init();
 
-	void* x = (void*) 42;
-	syscall_memlimit(x);
-
 	int y = 1;
 
 	void* some_block = malloc(sizeof y);
