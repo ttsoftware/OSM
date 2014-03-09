@@ -1,0 +1,68 @@
+\documentclass[12pt,a4paper,danish]{article}
+\usepackage [utf8]{inputenc}
+\usepackage [danish]{babel}
+\usepackage [T1]{fontenc}
+\usepackage {amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [top=3.4cm, bottom=2cm, left=3cm, right=3cm] {geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pgfkeys}
+\titleformat{\section}[block]{\large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries\filcenter}{}{1em}{}
+\setcounter{secnumdepth}{0}
+\usepackage{pgfgantt}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usetikzlibrary{positioning,shapes, shadows, arrows}\usepackage{tikz}
+\usepackage{url}
+\linespread{1.2}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[L]{G4}
+\fancyhead[C]{OSM}
+\fancyhead[R]{March 9 2014}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{\fill}
+    \begin{center}
+      {\Huge Operating systems and multiprogramming}\\[0.7cm]
+      {\huge G-assignment 4}\\[0.7cm]
+      {\large Alexander Worm Olsen - bdj816}\\[0.4cm]
+      {\large Allan Martin Nielsen - jcl187}\\[0.4cm]
+      {\large Troels Thompsen - qvw203}\\[0.4cm]
+      {\small March 9 2014}\\[0.3cm] 
+      {\small Department of Computer Science}\\
+      {\small University of Copenhagen}
+    \end{center}
+    \vspace*{\fill}
+\end{titlepage}
+
+\section{TLB exception handling}
+We were asked to implement the handling of exceptions caused by TLB misses. We have chosen to implement this using a random inserting of a page, which is not at all effective or efficient but easy to implement.
+
+First we removed any occurrences of the function tlb\_fill, and instead implemented the functionality of tlb\_store and tlb\_load, where tlb\_load simply calls tlb\_store. Firstly we get the exception state with the pre implemented function \_tlb\_get\_exception\_state. Then we find our thread and the pagetable associated with this. With this we can look through our pagetable and find the appropriate virtual page number. If no entry in the pagetable is found then an error is thrown otherwise we write the entry randomly in the TLB.
+
+Please note that we've chosen to send kernel exceptions into userland exceptions, e.g. they are handled in the same way. 
+
+\section{Dynamic allocation for user processes}
+To complete this task we were to implement the functionality of dynamic memory allocation for user processes. First we implemented the system call memlimit. In this we find the pagletable associated with the current thread, then we calculate the number of entries to be made and add these to the valid cound of the pagetable and writes the entries to the pagetable.
+
+In order to use the functionality of memlimit we've changed the implementations of free and malloc from the user library to use memlimit. In malloc we've changed the lists of free blocks to be of length 0 at initialising, and then in malloc, when no more blocks are available we use syscall\_memlimit to create an appropriate number of new pages depending on the needed number of bytes.
+
+The changes to free was very limited. These were automatically taken care of when we change the size of our free block list. Therefore you will find no changes done specifically in the function free.
+ 
+\section{Extended tests}
+We've made three separate test files to test the TLB exception handling and Dynamic memory allocation. These are found in tlbtest1, tlbtest2 and tlbtest3.
+
+The first, tlbtest1, tests for a user process that tries to allocate to much memory, and therefore ends in the TLB exception handling, only here the memory that is to be allocated is bigger than what the TLB exception handling can manage.
+
+The tlbtest2 file shows the example of a TLB exception handling where the process doesn't exceed the avaiable amount of memory.
+
+The last test file, tlbtest3, shows the library functions malloc and free. We've used print statements in the implementation of the two functions to see that they worked perfectly, but these have been deleted in our hand-in, and therefore nothing is shown, but neither no errors are thrown.
+
+\end{document}
