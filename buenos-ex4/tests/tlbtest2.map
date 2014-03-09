@@ -9,7 +9,7 @@ Discarded input sections
 
  .reginfo       0x0000000000000000       0x18 _syscall.o
  .reginfo       0x0000000000000000       0x18 lib.o
- .reginfo       0x0000000000000000       0x18 calc.o
+ .reginfo       0x0000000000000000       0x18 tlbtest2.o
 
 Memory Configuration
 
@@ -20,7 +20,7 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x2fe0
+ro_segment      0x0000000000001000     0x2794
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
@@ -71,15 +71,9 @@ ro_segment      0x0000000000001000     0x2fe0
                 0x00000000000033ec                realloc
                 0x0000000000003508                atoi
  .rodata        0x0000000000003600      0x110 lib.o
- .text          0x0000000000003710      0x864 calc.o
-                0x0000000000003710                stack_init
-                0x0000000000003740                stack_empty
-                0x000000000000377c                stack_top
-                0x00000000000037b4                stack_pop
-                0x0000000000003848                stack_push
-                0x0000000000003b84                numeric
-                0x0000000000003c3c                main
- .rodata        0x0000000000003f74       0x6c calc.o
+ .text          0x0000000000003710       0x70 tlbtest2.o
+                0x0000000000003710                main
+ .rodata        0x0000000000003780       0x14 tlbtest2.o
 
 rw_segment      0x0000000000004000        0x4
  *(.data .bss COMMON)
@@ -91,14 +85,14 @@ rw_segment      0x0000000000004000        0x4
  .bss           0x0000000000004000        0x0 lib.o
  COMMON         0x0000000000004000        0x4 lib.o
                 0x0000000000004000                free_list
- .data          0x0000000000004004        0x0 calc.o
- .bss           0x0000000000004004        0x0 calc.o
+ .data          0x0000000000004004        0x0 tlbtest2.o
+ .bss           0x0000000000004004        0x0 tlbtest2.o
                 0x0000000000004004                BINARY_ENDS_HERE = .
 LOAD crt.o
 LOAD _syscall.o
 LOAD lib.o
-LOAD calc.o
-OUTPUT(calc elf32-bigmips)
+LOAD tlbtest2.o
+OUTPUT(tlbtest2 elf32-bigmips)
 
 .scommon        0x0000000000004004        0x0
  .scommon       0x0000000000004004        0x0 lib.o
@@ -106,27 +100,27 @@ OUTPUT(calc elf32-bigmips)
 .reginfo        0x0000000000000000       0x18
  .reginfo       0x0000000000000000       0x18 crt.o
 
-.pdr            0x0000000000000000      0x7c0
+.pdr            0x0000000000000000      0x640
  .pdr           0x0000000000000000       0x40 crt.o
  .pdr           0x0000000000000040       0x20 _syscall.o
  .pdr           0x0000000000000060      0x5c0 lib.o
- .pdr           0x0000000000000620      0x1a0 calc.o
+ .pdr           0x0000000000000620       0x20 tlbtest2.o
 
 .mdebug.abi32   0x0000000000000000        0x0
  .mdebug.abi32  0x0000000000000000        0x0 lib.o
- .mdebug.abi32  0x0000000000000000        0x0 calc.o
+ .mdebug.abi32  0x0000000000000000        0x0 tlbtest2.o
 
 .comment        0x0000000000000000       0x11
  .comment       0x0000000000000000       0x11 lib.o
                                          0x12 (size before relaxing)
- .comment       0x0000000000000000       0x12 calc.o
+ .comment       0x0000000000000000       0x12 tlbtest2.o
 
 .gnu.attributes
                 0x0000000000000000       0x10
  .gnu.attributes
                 0x0000000000000000       0x10 lib.o
  .gnu.attributes
-                0x0000000000000010       0x10 calc.o
+                0x0000000000000010       0x10 tlbtest2.o
 
 Cross Reference Table
 
@@ -136,41 +130,29 @@ _start                                            crt.o
 _syscall                                          _syscall.o
                                                   lib.o
 atoi                                              lib.o
-                                                  calc.o
 calloc                                            lib.o
 free                                              lib.o
-                                                  calc.o
 free_list                                         lib.o
 getc                                              lib.o
 getc_raw                                          lib.o
 gets                                              lib.o
 heap                                              lib.o
 heap_init                                         lib.o
-                                                  calc.o
-main                                              calc.o
+main                                              tlbtest2.o
                                                   crt.o
 malloc                                            lib.o
-                                                  calc.o
 memcmp                                            lib.o
 memcpy                                            lib.o
 memset                                            lib.o
-numeric                                           calc.o
 printf                                            lib.o
-                                                  calc.o
+                                                  tlbtest2.o
 putc                                              lib.o
 puts                                              lib.o
 readline                                          lib.o
-                                                  calc.o
 realloc                                           lib.o
 snprintf                                          lib.o
-stack_empty                                       calc.o
-stack_init                                        calc.o
-stack_pop                                         calc.o
-stack_push                                        calc.o
-stack_top                                         calc.o
 strcat                                            lib.o
 strcmp                                            lib.o
-                                                  calc.o
 strcpy                                            lib.o
 strlen                                            lib.o
 strncat                                           lib.o
@@ -183,7 +165,6 @@ syscall_delete                                    lib.o
 syscall_exec                                      lib.o
 syscall_execp                                     lib.o
 syscall_exit                                      lib.o
-                                                  calc.o
 syscall_fork                                      lib.o
 syscall_halt                                      lib.o
 syscall_join                                      lib.o

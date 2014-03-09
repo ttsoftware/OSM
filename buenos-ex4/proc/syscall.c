@@ -37,6 +37,7 @@
 #include "proc/syscall.h"
 #include "kernel/halt.h"
 #include "kernel/panic.h"
+#include "kernel/thread.h"
 #include "lib/libc.h"
 #include "kernel/assert.h"
 #include "proc/process.h"
@@ -45,6 +46,7 @@
 #include "fs/vfs.h"
 #include "kernel/thread.h"
 #include "proc/semaphore.h"
+#include "vm/tlb.h"
 
 int syscall_write(uint32_t fd, char *s, int len)
 {
@@ -72,6 +74,33 @@ int syscall_read(uint32_t fd, char *s, int len)
     KERNEL_PANIC("Read syscall not finished yet.");
     return 0;
   }
+}
+
+void* syscall_memlimit(void* heap_end) {
+    process_table_t* process = process_get_current_process_entry();
+    // return current heap if heap_end is NULL
+    if (heap_end == NULL) {
+        return process->heap_end;
+    }
+
+    thread_table_t* thread = thread_get_current_thread_entry();
+    pagetable_t* pagetable = thread->pagetable;
+
+    int old_count = pagetable->valid_count;
+    int new_entries = heap_end - process->heap_end;
+
+    if (new_entries < 0) { 
+        return NULL;
+    }
+
+    _tlb_write(pagetable->entries, old_count, new_entries);
+    pagetable->valid_count += new_entries;
+
+    KERNEL_ASSERT((int)pagetable->valid_count == (old_count + new_entries));
+
+    process->heap_end = heap_end;
+
+    return process->heap_end;
 }
 
 /**
@@ -129,9 +158,14 @@ void syscall_handle(context_t *user_context)
     case SYSCALL_SEM_DESTROY:
       V0 = syscall_sem_destroy((usr_sem_t *) A1); 
       break;
+    case SYSCALL_MEMLIMIT:
+      V0 = (int) syscall_memlimit((void*) A1);
+    break;
     default:
       KERNEL_PANIC("Unhandled system call\n");
     }
+
+
 
   /* Move to next instruction after system call */
   user_context->pc += 4;

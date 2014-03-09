@@ -40,14 +40,23 @@
 #include "vm/tlb.h"
 #include "vm/pagetable.h"
 
+tlb_entry_t* vpn_lookup(unsigned int vpn2, pagetable_t* pagetable) {
+    for (unsigned int i = 0; i < pagetable->valid_count; i++) {
+        if (pagetable->entries[i].VPN2 == vpn2) {
+            return &(pagetable->entries[i]);
+        }
+    }
+    return NULL;
+}
+
 void tlb_modified_exception(void)
 {
-    KERNEL_PANIC("Unhandled TLB modified exception");
+    KERNEL_PANIC("Dirty bit was 0.");
 }
 
 void tlb_load_exception(void)
 {
-    KERNEL_PANIC("Unhandled TLB load exception");
+    tlb_store_exception();
 }
 
 void tlb_store_exception(void)
@@ -58,57 +67,16 @@ void tlb_store_exception(void)
     thread_table_t* current_thread = thread_get_current_thread_entry();
     pagetable_t* pagetable = current_thread->pagetable;
 
-    kprintf("0x%8.8x 1\n", tes.badvpn2);
-
-    tlb_entry_t* entry = vpn_lookup(tes.badvpn2, pagetable->entries);
-    if (entry->D0 == 1) {
-        entry->VPN2--;
-        entry->D0 = 0;
-    }
-    else {
-        KERNEL_PANIC("Unhandled TLB store exception");    
+    tlb_entry_t* entry = vpn_lookup(tes.badvpn2, pagetable);
+  
+    if (entry == NULL) {
+        kprintf("TLB exception. Details:\n"
+           "Failed Virtual Address: 0x%8.8x\n"
+           "Virtual Page Number:    0x%8.8x\n"
+           "ASID (Thread number):   %d\n",
+           tes.badvaddr, tes.badvpn2, tes.asid);
+        KERNEL_PANIC("Segmentation fault.");
     }
 
     _tlb_write_random(entry);
-    
-    entry->D0 = 1;
-
-    kprintf("0x%8.8x 2\n", entry->VPN2);
-}
-
-tlb_entry_t* vpn_lookup(unsigned int vpn2, tlb_entry_t *entries) {
-    for (int i = 0; i < PAGETABLE_ENTRIES; i++) {
-        // for some reason we subtract the dirty bit
-        if ((int)(entries[i].VPN2 - entries[i].D0) == (int)vpn2) {
-            return &(entries[i]);
-        }
-    }
-    return NULL;
-}
-
-/**
- * Fill TLB with given pagetable. This function is used to set memory
- * mappings in CP0's TLB before we have a proper TLB handling system.
- * This approach limits the maximum mapping size to 128kB.
- *
- * @param pagetable Mappings to write to TLB.
- *
- */
-
-void tlb_fill(pagetable_t *pagetable)
-{
-    if(pagetable == NULL)
-	return;
-
-    /* Check that the pagetable can fit into TLB. This is needed until
-     we have proper VM system, because the whole pagetable must fit
-     into TLB. */
-    KERNEL_ASSERT(pagetable->valid_count <= (_tlb_get_maxindex()+1));
-
-    _tlb_write(pagetable->entries, 0, pagetable->valid_count);
-
-    /* Set ASID field in Co-Processor 0 to match thread ID so that
-       only entries with the ASID of the current thread will match in
-       the TLB hardware. */
-    _tlb_set_asid(pagetable->ASID);
 }

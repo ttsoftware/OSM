@@ -96,11 +96,10 @@ void tlb_load_exception(void);
 void tlb_store_exception(void);
 
 /* FIND ENTRY AND SHIT */
-tlb_entry_t* vpn_lookup(unsigned int vpn, tlb_entry_t *entries);
+//tlb_entry_t* vpn_lookup(unsigned int vpn, pagetable_t* pagetable);
 
 /* Forward declare pagetable_t (== struct pagetable_struct_t) */
 struct pagetable_struct_t;
-void tlb_fill(struct pagetable_struct_t *pagetable);
 
 /* assembler function wrappers */
 void _tlb_get_exception_state(tlb_exception_state_t *state);

@@ -2,7 +2,7 @@
 Allocating common symbols
 Common symbol       size              file
 
-heap                0x100             lib.o
+heap                0x0               lib.o
 free_list           0x4               lib.o
 
 Discarded input sections
@@ -20,14 +20,14 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x2794
+ro_segment      0x0000000000001000     0x2818
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
                 0x0000000000001018                __main
  .text          0x0000000000001024        0xc _syscall.o
                 0x0000000000001024                _syscall
- .text          0x0000000000001030     0x254c lib.o
+ .text          0x0000000000001030     0x25d0 lib.o
                 0x0000000000001030                syscall_halt
                 0x0000000000001070                syscall_exec
                 0x00000000000010b8                syscall_execp
@@ -66,16 +66,16 @@ ro_segment      0x0000000000001000     0x2794
                 0x0000000000002e08                snprintf
                 0x0000000000002e70                heap_init
                 0x0000000000002ec0                malloc
-                0x00000000000030a4                free
-                0x00000000000032a8                calloc
-                0x0000000000003368                realloc
-                0x0000000000003484                atoi
- .rodata        0x000000000000357c      0x110 lib.o
- .text          0x000000000000368c       0xa8 exec.o
-                0x000000000000368c                main
- .rodata        0x0000000000003734       0x60 exec.o
+                0x0000000000003128                free
+                0x000000000000332c                calloc
+                0x00000000000033ec                realloc
+                0x0000000000003508                atoi
+ .rodata        0x0000000000003600      0x110 lib.o
+ .text          0x0000000000003710       0xa8 exec.o
+                0x0000000000003710                main
+ .rodata        0x00000000000037b8       0x60 exec.o
 
-rw_segment      0x0000000000004000      0x104
+rw_segment      0x0000000000004000        0x4
  *(.data .bss COMMON)
  .data          0x0000000000004000        0x0 crt.o
  .bss           0x0000000000004000        0x0 crt.o
@@ -83,17 +83,19 @@ rw_segment      0x0000000000004000      0x104
  .bss           0x0000000000004000        0x0 _syscall.o
  .data          0x0000000000004000        0x0 lib.o
  .bss           0x0000000000004000        0x0 lib.o
- COMMON         0x0000000000004000      0x104 lib.o
-                0x0000000000004000                heap
-                0x0000000000004100                free_list
- .data          0x0000000000004104        0x0 exec.o
- .bss           0x0000000000004104        0x0 exec.o
-                0x0000000000004104                BINARY_ENDS_HERE = .
+ COMMON         0x0000000000004000        0x4 lib.o
+                0x0000000000004000                free_list
+ .data          0x0000000000004004        0x0 exec.o
+ .bss           0x0000000000004004        0x0 exec.o
+                0x0000000000004004                BINARY_ENDS_HERE = .
 LOAD crt.o
 LOAD _syscall.o
 LOAD lib.o
 LOAD exec.o
 OUTPUT(exec elf32-bigmips)
+
+.scommon        0x0000000000004004        0x0
+ .scommon       0x0000000000004004        0x0 lib.o
 
 .reginfo        0x0000000000000000       0x18
  .reginfo       0x0000000000000000       0x18 crt.o
