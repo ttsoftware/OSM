@@ -751,7 +751,7 @@ int vfs_write(openfile_t file, void *buffer, int datasize)
     ret = fs->write(fs, openfile->fileid, buffer, datasize, 
 			 openfile->seek_position);
 
-    if(ret > 0) {
+    if (ret > 0) {
         semaphore_P(openfile_table.sem);
 	    openfile->seek_position += ret;
         semaphore_V(openfile_table.sem);
@@ -838,9 +838,9 @@ int vfs_remove(char *pathname)
     fs = vfs_get_filesystem(volumename);
 
     if(fs == NULL) {
-	semaphore_V(vfs_table.sem);
-        vfs_end_op();
-	return VFS_NO_SUCH_FS;
+	   semaphore_V(vfs_table.sem);
+       vfs_end_op();
+	   return VFS_NO_SUCH_FS;
     }
 
     ret = fs->remove(fs, filename);

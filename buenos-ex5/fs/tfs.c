@@ -393,16 +393,15 @@ int tfs_create(fs_t *fs, char *filename, int size)
        is no longer needed, so lets use it as zero buffer. */ 
     memoryset(tfs->buffer_bat, 0, TFS_BLOCK_SIZE);
     for(i=0;i<numblocks;i++) {
-	req.block = tfs->buffer_inode->block[i];
-	req.buf   = ADDR_KERNEL_TO_PHYS((uint32_t)tfs->buffer_bat);
-	req.sem   = NULL;
-	r = tfs->disk->write_block(tfs->disk, &req);
-	if(r==0) {
-	    /* An error occured. */
-	    semaphore_V(tfs->lock);
-	    return VFS_ERROR;
-	}
-       
+    	req.block = tfs->buffer_inode->block[i];
+    	req.buf   = ADDR_KERNEL_TO_PHYS((uint32_t)tfs->buffer_bat);
+    	req.sem   = NULL;
+    	r = tfs->disk->write_block(tfs->disk, &req);
+        if(r==0) {
+	       /* An error occured. */
+	       semaphore_V(tfs->lock);
+	       return VFS_ERROR;
+	    }
     }
 
     semaphore_V(tfs->lock);

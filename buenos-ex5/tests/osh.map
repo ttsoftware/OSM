@@ -20,7 +20,7 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x31f4
+ro_segment      0x0000000000001000     0x3590
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
@@ -71,7 +71,7 @@ ro_segment      0x0000000000001000     0x31f4
                 0x00000000000033ec                realloc
                 0x0000000000003508                atoi
  .rodata        0x0000000000003600      0x110 lib.o
- .text          0x0000000000003710      0x8d8 osh.o
+ .text          0x0000000000003710      0xbec osh.o
                 0x0000000000003710                print_prompt
                 0x0000000000003750                tokenize
                 0x00000000000038b0                run_program
@@ -81,13 +81,16 @@ ro_segment      0x0000000000001000     0x31f4
                 0x0000000000003b34                cmd_echo
                 0x0000000000003be0                cmd_show
                 0x0000000000003dcc                cmd_read
-                0x0000000000003fb4                cmd_help
- .rodata        0x0000000000003fe8      0x20c osh.o
+                0x0000000000003fb4                cmd_cp
+                0x000000000000420c                cmd_rm
+                0x0000000000004290                cmd_help
+                0x00000000000042c4                cmd_exit
+ .rodata        0x00000000000042fc      0x294 osh.o
 
-.rel.dyn        0x00000000000041f4        0x0
+.rel.dyn        0x0000000000004590        0x0
  .rel.dyn       0x0000000000000000        0x0 osh.o
 
-rw_segment      0x0000000000005000       0x34
+rw_segment      0x0000000000005000       0x58
  *(.data .bss COMMON)
  .data          0x0000000000005000        0x0 crt.o
  .bss           0x0000000000005000        0x0 crt.o
@@ -97,27 +100,27 @@ rw_segment      0x0000000000005000       0x34
  .bss           0x0000000000005000        0x0 lib.o
  COMMON         0x0000000000005000        0x4 lib.o
                 0x0000000000005000                free_list
- .data          0x0000000000005004       0x30 osh.o
+ .data          0x0000000000005004       0x54 osh.o
                 0x0000000000005004                commands
- .bss           0x0000000000005034        0x0 osh.o
-                0x0000000000005034                BINARY_ENDS_HERE = .
+ .bss           0x0000000000005058        0x0 osh.o
+                0x0000000000005058                BINARY_ENDS_HERE = .
 LOAD crt.o
 LOAD _syscall.o
 LOAD lib.o
 LOAD osh.o
 OUTPUT(osh elf32-bigmips)
 
-.scommon        0x0000000000005034        0x0
- .scommon       0x0000000000005034        0x0 lib.o
+.scommon        0x0000000000005058        0x0
+ .scommon       0x0000000000005058        0x0 lib.o
 
 .reginfo        0x0000000000000000       0x18
  .reginfo       0x0000000000000000       0x18 crt.o
 
-.pdr            0x0000000000000000      0x760
+.pdr            0x0000000000000000      0x7c0
  .pdr           0x0000000000000000       0x40 crt.o
  .pdr           0x0000000000000040       0x20 _syscall.o
  .pdr           0x0000000000000060      0x5c0 lib.o
- .pdr           0x0000000000000620      0x140 osh.o
+ .pdr           0x0000000000000620      0x1a0 osh.o
 
 .mdebug.abi32   0x0000000000000000        0x0
  .mdebug.abi32  0x0000000000000000        0x0 lib.o
@@ -144,9 +147,12 @@ _syscall                                          _syscall.o
                                                   lib.o
 atoi                                              lib.o
 calloc                                            lib.o
+cmd_cp                                            osh.o
 cmd_echo                                          osh.o
+cmd_exit                                          osh.o
 cmd_help                                          osh.o
 cmd_read                                          osh.o
+cmd_rm                                            osh.o
 cmd_show                                          osh.o
 commands                                          osh.o
 free                                              lib.o
@@ -189,10 +195,12 @@ syscall_close                                     lib.o
 syscall_create                                    lib.o
                                                   osh.o
 syscall_delete                                    lib.o
+                                                  osh.o
 syscall_exec                                      lib.o
                                                   osh.o
 syscall_execp                                     lib.o
 syscall_exit                                      lib.o
+                                                  osh.o
 syscall_fork                                      lib.o
 syscall_halt                                      lib.o
 syscall_join                                      lib.o
@@ -203,6 +211,7 @@ syscall_open                                      lib.o
 syscall_read                                      lib.o
                                                   osh.o
 syscall_seek                                      lib.o
+                                                  osh.o
 syscall_sem_open                                  lib.o
 syscall_sem_p                                     lib.o
 syscall_sem_v                                     lib.o

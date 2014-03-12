@@ -18,13 +18,19 @@ typedef struct {
 int cmd_echo(int, char**);
 int cmd_show(int, char**);
 int cmd_read(int, char**);
+int cmd_rm(int, char**);
+int cmd_cp(int, char**);
+int cmd_exit();
 int cmd_help();
 
 cmd_t commands[] = { 
     {"echo", cmd_echo, "print the arguments to the screen"},
     {"show", cmd_show, "print the contents of the given file to the screen"},
     {"read", cmd_read, "read a line from standard in and write it to a new file"},
-    {"help", cmd_help, "show this help message"}
+    {"rm", cmd_rm, "deletes a file if it exists."},
+    {"cp", cmd_cp, "copies a file."},
+    {"exit", cmd_exit, "exit the buenos shell."},
+    {"help", cmd_help, "show this help message"},
 };
 
 #define N_COMMANDS sizeof(commands) / sizeof(cmd_t)
@@ -172,7 +178,50 @@ int cmd_read(int argc, char** argv) {
     return 0;
 }
 
+int cmd_cp(int argc, char** argv) {
+    if (argc < 2) {
+        printf("Usage: cp <file>\n");
+        return 1;
+    }
+
+    char temp_buffer[1];
+
+    int handle = syscall_open(argv[1]);
+
+    int length = 0;
+    while (syscall_read(handle, &temp_buffer, 1) > 0) {
+        length++;
+    }
+
+    char buffer[length];
+    syscall_seek(handle, 0);
+    syscall_read(handle, &buffer, length);
+
+    handle = syscall_open(argv[2]);
+    if (handle == -1) {
+        syscall_create(argv[2], length);
+        handle = syscall_open(argv[2]);
+    }
+    syscall_write(handle, &buffer, length);
+
+    return 0;
+}
+
+int cmd_rm(int argc, char** argv) {
+    if (argc < 2) {
+        printf("Usage: rm <file>\n");
+        return 1;
+    }
+    syscall_delete(argv[1]);
+    return 0;
+}
+
 int cmd_help() {
     help();
     return 0;
 }   
+
+int cmd_exit() {
+    syscall_exit(0);
+    return 0;
+}

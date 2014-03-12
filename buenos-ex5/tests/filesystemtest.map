@@ -20,7 +20,7 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x2930
+ro_segment      0x0000000000001000     0x2938
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
@@ -71,9 +71,9 @@ ro_segment      0x0000000000001000     0x2930
                 0x00000000000033ec                realloc
                 0x0000000000003508                atoi
  .rodata        0x0000000000003600      0x110 lib.o
- .text          0x0000000000003710      0x1ec filesystemtest.o
+ .text          0x0000000000003710      0x1f8 filesystemtest.o
                 0x0000000000003710                main
- .rodata        0x00000000000038fc       0x34 filesystemtest.o
+ .rodata        0x0000000000003908       0x30 filesystemtest.o
 
 rw_segment      0x0000000000004000        0x4
  *(.data .bss COMMON)
@@ -163,6 +163,7 @@ syscall_close                                     lib.o
 syscall_create                                    lib.o
                                                   filesystemtest.o
 syscall_delete                                    lib.o
+                                                  filesystemtest.o
 syscall_exec                                      lib.o
 syscall_execp                                     lib.o
 syscall_exit                                      lib.o

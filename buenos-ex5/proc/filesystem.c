@@ -18,7 +18,7 @@ int syscall_open(char const* pathname)
 
 int syscall_close(int filehandle) {
 	int code = vfs_close(filehandle-2);
-	if (code > 0) {
+	if (code >= 0) {
 		return code;
 	}
 	return -1;
@@ -26,7 +26,7 @@ int syscall_close(int filehandle) {
 
 int syscall_seek(int filehandle, int offset) {
 	int code = vfs_seek(filehandle-2, offset);
-	if (code > 0) {
+	if (code >= 0) {
 		return code;
 	}
 	return -1;
@@ -34,7 +34,7 @@ int syscall_seek(int filehandle, int offset) {
 
 int syscall_create(char const* pathname, int size) {
 	int code = vfs_create((char*) pathname, size);
-	if (code > 0) {
+	if (code >= 0) {
 		return code;
 	}
 	return -1;
@@ -42,7 +42,7 @@ int syscall_create(char const* pathname, int size) {
 
 int syscall_delete(char const* pathname) {
 	int code = vfs_remove((char*) pathname);
-	if (code > 0) {
+	if (code >= 0) {
 		return code;
 	}
 	return -1;
@@ -74,7 +74,7 @@ int syscall_write(int filehandle, void const* buffer, int length)
 		return gcd->write(gcd, buffer, length);
 	} 
 	else {
-		int bytes_written = vfs_write(filehandle-2,(char*) buffer, length);		
+		int bytes_written = vfs_write(filehandle-2, (void*) buffer, length);
 		KERNEL_ASSERT(bytes_written <= length);
 		return bytes_written;
 	}
