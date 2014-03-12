@@ -6,6 +6,7 @@ make clean -C tests/
 make -C tests/
 rm fyams.harddisk
 util/tfstool create fyams.harddisk 2048 arkimedes
-util/tfstool write fyams.harddisk tests/tlbtest3 tlbtest3
-fyams-sim buenos 'initprog=[arkimedes]tlbtest3'
+util/tfstool write fyams.harddisk tests/filesystemtest filesystemtest
+util/tfstool write fyams.harddisk tests/hej hej
+fyams-sim buenos 'initprog=[arkimedes]filesystemtest'
 

@@ -536,33 +536,33 @@ openfile_t vfs_open(char *pathname)
 
     if (vfs_parse_pathname(pathname, volumename, filename) != VFS_OK) {
         vfs_end_op();
-	return VFS_ERROR;
+        return VFS_ERROR;
     }
 
     semaphore_P(vfs_table.sem);
     semaphore_P(openfile_table.sem);
     
     for(file=0; file<CONFIG_MAX_OPEN_FILES; file++) {
-	if(openfile_table.files[file].filesystem == NULL) {
-	    break;
-	}
+        if(openfile_table.files[file].filesystem == NULL) {
+            break;
+        }
     }
 
-    if(file >= CONFIG_MAX_OPEN_FILES) {
-	semaphore_V(openfile_table.sem);
-	semaphore_V(vfs_table.sem);
-	kprintf("VFS: Warning, maximum number of open files exceeded.");
-        vfs_end_op();
-	return VFS_LIMIT;
+    if (file >= CONFIG_MAX_OPEN_FILES) {
+	   semaphore_V(openfile_table.sem);
+	   semaphore_V(vfs_table.sem);
+	   kprintf("VFS: Warning, maximum number of open files exceeded.");
+       vfs_end_op();
+	   return VFS_LIMIT;
     }
 
     fs = vfs_get_filesystem(volumename);
 
     if(fs == NULL) {
-	semaphore_V(openfile_table.sem);
-	semaphore_V(vfs_table.sem);
-        vfs_end_op();
-	return VFS_NO_SUCH_FS;
+	   semaphore_V(openfile_table.sem);
+	   semaphore_V(vfs_table.sem);
+       vfs_end_op();
+	   return VFS_NO_SUCH_FS;
     }
 
     openfile_table.files[file].filesystem = fs;
@@ -572,12 +572,12 @@ openfile_t vfs_open(char *pathname)
 
     fileid = fs->open(fs, filename);
 
-    if(fileid < 0) {
-	semaphore_P(openfile_table.sem);
-	openfile_table.files[file].filesystem = NULL;
-	semaphore_V(openfile_table.sem);
-        vfs_end_op();
-	return fileid; /* negative -> error*/
+    if (fileid < 0) {
+	   semaphore_P(openfile_table.sem);
+	   openfile_table.files[file].filesystem = NULL;
+	   semaphore_V(openfile_table.sem);
+       vfs_end_op();
+	   return fileid; /* negative -> error*/
     }
 
     openfile_table.files[file].fileid = fileid;
@@ -753,7 +753,7 @@ int vfs_write(openfile_t file, void *buffer, int datasize)
 
     if(ret > 0) {
         semaphore_P(openfile_table.sem);
-	openfile->seek_position += ret;
+	    openfile->seek_position += ret;
         semaphore_V(openfile_table.sem);
     }
 

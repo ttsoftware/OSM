@@ -139,9 +139,7 @@ void device_init(void)
  */
 device_t *device_get(uint32_t typecode, uint32_t n)
 {
-    int i;
-
-    for(i = 0; i < number_of_devices; i++) {
+    for(int i = 0; i < number_of_devices; i++) {
         if (device_table[i]->type == typecode) {
             if (n == 0)
                 return device_table[i];

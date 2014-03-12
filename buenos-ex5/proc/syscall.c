@@ -46,35 +46,8 @@
 #include "fs/vfs.h"
 #include "kernel/thread.h"
 #include "proc/semaphore.h"
+#include "proc/filesystem.h"
 #include "vm/tlb.h"
-
-int syscall_write(uint32_t fd, char *s, int len)
-{
-  gcd_t *gcd;
-  device_t *dev;
-  if (fd == FILEHANDLE_STDOUT || fd == FILEHANDLE_STDERR) {
-    dev = device_get(YAMS_TYPECODE_TTY, 0);
-    gcd = (gcd_t *)dev->generic_device;
-    return gcd->write(gcd, s, len);
-  } else {
-    KERNEL_PANIC("Write syscall not finished yet.");
-    return 0;
-  }
-}
-
-int syscall_read(uint32_t fd, char *s, int len)
-{
-  gcd_t *gcd;
-  device_t *dev;
-  if (fd == FILEHANDLE_STDIN) {
-    dev = device_get(YAMS_TYPECODE_TTY, 0);
-    gcd = (gcd_t *)dev->generic_device;
-    return gcd->read(gcd, s, len);
-  } else {
-    KERNEL_PANIC("Read syscall not finished yet.");
-    return 0;
-  }
-}
 
 void* syscall_memlimit(void* heap_end) {
     process_table_t* process = process_get_current_process_entry();
@@ -112,64 +85,75 @@ void* syscall_memlimit(void* heap_end) {
  */
 void syscall_handle(context_t *user_context)
 {
-  int A1 = user_context->cpu_regs[MIPS_REGISTER_A1];
-  int A2 = user_context->cpu_regs[MIPS_REGISTER_A2];
-  int A3 = user_context->cpu_regs[MIPS_REGISTER_A3];
+    int A1 = user_context->cpu_regs[MIPS_REGISTER_A1];
+    int A2 = user_context->cpu_regs[MIPS_REGISTER_A2];
+    int A3 = user_context->cpu_regs[MIPS_REGISTER_A3];
 
-#define V0 (user_context->cpu_regs[MIPS_REGISTER_V0])
+    #define V0 (user_context->cpu_regs[MIPS_REGISTER_V0])
 
-  /* When a syscall is executed in userland, register a0 contains
-   * the number of the syscall. Registers a1, a2 and a3 contain the
-   * arguments of the syscall. The userland code expects that after
-   * returning from the syscall instruction the return value of the
-   * syscall is found in register v0. Before entering this function
-   * the userland context has been saved to user_context and after
-   * returning from this function the userland context will be
-   * restored from user_context.*/
-  switch(user_context->cpu_regs[MIPS_REGISTER_A0])
-    {
-    case SYSCALL_HALT:
-      halt_kernel();
-      break;
-    case SYSCALL_EXEC:
-      V0 = process_spawn((char *)A1);
-      break;
-    case SYSCALL_EXIT:
-      process_finish(A1);
-      break;
-    case SYSCALL_JOIN:
-      V0 = process_join(A1);
-      break;
-    case SYSCALL_READ:
-      V0 = syscall_read(A1, (char *)A2, A3);
-      break;
-    case SYSCALL_WRITE:
-      V0 = syscall_write(A1, (char *)A2, A3);
-      break;
-    case SYSCALL_SEM_OPEN:
-      V0 = (int) syscall_sem_open((const char *) A1,A2);
-      break;
-    case SYSCALL_SEM_PROCURE:
-      V0 = syscall_sem_p((usr_sem_t *) A1);
-      break;
-    case SYSCALL_SEM_VACATE:
-      V0 = syscall_sem_v((usr_sem_t *) A1);
-      break;
-    case SYSCALL_SEM_DESTROY:
-      V0 = syscall_sem_destroy((usr_sem_t *) A1); 
-      break;
-    case SYSCALL_MEMLIMIT:
-      V0 = (int) syscall_memlimit((void*) A1);
-    break;
-    default:
-      KERNEL_PANIC("Unhandled system call\n");
+    /* When a syscall is executed in userland, register a0 contains
+     * the number of the syscall. Registers a1, a2 and a3 contain the
+     * arguments of the syscall. The userland code expects that after
+     * returning from the syscall instruction the return value of the
+     * syscall is found in register v0. Before entering this function
+     * the userland context has been saved to user_context and after
+     * returning from this function the userland context will be
+     * restored from user_context.*/
+    switch(user_context->cpu_regs[MIPS_REGISTER_A0]) {
+        case SYSCALL_HALT:
+            halt_kernel();
+            break;
+        case SYSCALL_EXEC:
+            V0 = process_spawn((char *)A1);
+            break;
+        case SYSCALL_EXIT:
+            process_finish(A1);
+            break;
+        case SYSCALL_JOIN:
+            V0 = process_join(A1);
+            break;
+        case SYSCALL_OPEN:
+            V0 = syscall_open((char const*) A1);
+            break;
+        case SYSCALL_CLOSE:
+            V0 = syscall_close((int) A1);
+            break;
+        case SYSCALL_SEEK:
+            V0 = syscall_seek((int) A1, (int) A2);
+            break;
+        case SYSCALL_CREATE:
+            V0 = syscall_create((char const*) A1, (int) A2);
+            break;
+        case SYSCALL_DELETE:
+            V0 = syscall_delete((char const*) A1);
+            break;
+        case SYSCALL_READ:
+            V0 = syscall_read(A1, (char *)A2, A3);
+            break;
+        case SYSCALL_WRITE:
+            V0 = syscall_write(A1, (char *)A2, A3);
+            break;
+        case SYSCALL_SEM_OPEN:
+            V0 = (int) syscall_sem_open((const char *) A1,A2);
+            break;
+        case SYSCALL_SEM_PROCURE:
+            V0 = syscall_sem_p((usr_sem_t *) A1);
+            break;
+        case SYSCALL_SEM_VACATE:
+            V0 = syscall_sem_v((usr_sem_t *) A1);
+            break;
+        case SYSCALL_SEM_DESTROY:
+            V0 = syscall_sem_destroy((usr_sem_t *) A1); 
+            break;
+        case SYSCALL_MEMLIMIT:
+            V0 = (int) syscall_memlimit((void*) A1);
+            break;
+        default:
+            KERNEL_PANIC("Unhandled system call\n");
     }
 
+    /* Move to next instruction after system call */
+    user_context->pc += 4;
 
-
-  /* Move to next instruction after system call */
-  user_context->pc += 4;
-
-#undef V0
-
+    #undef V0
 }

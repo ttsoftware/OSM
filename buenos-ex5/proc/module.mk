@@ -3,8 +3,7 @@
 # Set the module name
 MODULE := proc
 
-
-FILES := exception.c elf.c process.c syscall.c semaphore.c
+FILES := exception.c elf.c process.c syscall.c semaphore.c filesystem.c
 
 SRC += $(patsubst %, $(MODULE)/%, $(FILES))
 
