@@ -145,6 +145,18 @@ int syscall_read(int filehandle, void *buffer, int length)
                        (uint32_t)buffer, (uint32_t)length);
 }
 
+int syscall_filecount(char const* name)
+{
+  return (int)_syscall(SYSCALL_FILECOUNT, (uint32_t)name, 0, 0);
+}
+
+int syscall_file(char const* name, int index, char* buffer)
+{
+  return (int)_syscall(SYSCALL_FILE, 
+                       (uint32_t) name, 
+                       (uint32_t) index, 
+                       (uint32_t) buffer);
+}
 
 /* Set the file position of the open file identified by 'filehandle'
  * to 'offset'. Returns 0 on success or a negative value on error. 

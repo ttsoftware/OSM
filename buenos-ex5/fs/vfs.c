@@ -874,16 +874,72 @@ int vfs_getfree(char *filesystem)
 
     fs = vfs_get_filesystem(filesystem);
 
-    if(fs == NULL) {
-	semaphore_V(vfs_table.sem);
-        vfs_end_op();
-	return VFS_NO_SUCH_FS;
+    if (fs == NULL) {
+	   semaphore_V(vfs_table.sem);
+       vfs_end_op();
+	   return VFS_NO_SUCH_FS;
     }
 
     ret = fs->getfree(fs);
     
     semaphore_V(vfs_table.sem);
     
+    vfs_end_op();
+    return ret;
+}
+
+/**
+ * Return number of files in volume
+ **/
+int vfs_filecount(char* name) {
+    int ret = 0;
+
+    if (vfs_start_op() != VFS_OK) {
+        return VFS_UNUSABLE;
+    }
+
+    semaphore_P(vfs_table.sem);
+
+    fs_t *fs = vfs_get_filesystem(name);
+
+    if (fs == NULL) {
+       semaphore_V(vfs_table.sem);
+       vfs_end_op();
+       return VFS_NO_SUCH_FS;
+    }
+
+    ret = fs->filecount(fs);
+
+    semaphore_V(vfs_table.sem);
+
+    vfs_end_op();
+    return ret;
+}
+
+/**
+ * Return 
+ **/
+int vfs_file(char* name, int index, char* buffer) {
+    int ret = 0;
+
+    semaphore_P(vfs_table.sem);
+
+    if (vfs_start_op() != VFS_OK) {
+        return VFS_UNUSABLE;
+    }
+
+    fs_t *fs = vfs_get_filesystem(name);
+
+    if (fs == NULL) {
+       semaphore_V(vfs_table.sem);
+       vfs_end_op();
+       return VFS_NO_SUCH_FS;
+    }
+
+    ret = fs->file(fs, index, buffer);
+
+    semaphore_V(vfs_table.sem);
+
     vfs_end_op();
     return ret;
 }

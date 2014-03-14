@@ -79,3 +79,11 @@ int syscall_write(int filehandle, void const* buffer, int length)
 		return bytes_written;
 	}
 }
+
+int syscall_filecount(char const* name) {
+	return vfs_filecount((char*) name);
+}
+
+int syscall_file(char const* name, int index, char* buffer) {
+	return vfs_file((char*) name, index, buffer);
+}

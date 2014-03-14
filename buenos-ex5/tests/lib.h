@@ -85,6 +85,10 @@ void syscall_exit(int retval);
 int syscall_open(const char *filename);
 int syscall_close(int filehandle);
 int syscall_seek(int filehandle, int offset);
+
+int syscall_filecount(char const* name);
+int syscall_file(char const* name, int index, char* buffer);
+
 int syscall_read(int filehandle, void *buffer, int length);
 int syscall_write(int filehandle, const void *buffer, int length);
 int syscall_create(const char *filename, int size);

@@ -168,6 +168,8 @@ fs_t * tfs_init(gbd_t *disk)
     fs->read    = tfs_read;
     fs->write   = tfs_write;
     fs->getfree  = tfs_getfree;
+    fs->filecount = tfs_filecount;
+    fs->file = tfs_file;
 
     return fs;
 }
@@ -814,6 +816,46 @@ int tfs_getfree(fs_t *fs)
     
     semaphore_V(tfs->lock);
     return (tfs->totalblocks - allocated)*TFS_BLOCK_SIZE;
+}
+
+int tfs_filecount(fs_t* fs) {
+    tfs_t *tfs = (tfs_t *)fs->internal;
+
+    semaphore_P(tfs->lock);
+
+    tfs_direntry_t* dir = tfs->buffer_md;
+
+    int filecount = 0;
+    for (unsigned int i = 0; i < TFS_MAX_FILES; i++) {
+        if (stringcmp(dir[i].name, "") != 0) {
+            filecount++;
+        }
+    }
+
+    semaphore_V(tfs->lock);
+
+    return filecount;
+}
+
+int tfs_file(fs_t *fs, int index, char* buffer) {
+
+    tfs_t *tfs = (tfs_t *)fs->internal;
+
+    semaphore_P(tfs->lock);
+
+    tfs_direntry_t* dir = tfs->buffer_md;
+
+    for (unsigned int i = 0; i < TFS_MAX_FILES; i++) {
+        if ((unsigned)index == i 
+            && stringcmp(dir[i].name, "") != 0) {
+            
+            (&buffer)[i] = dir[i].name;
+        }
+    }
+
+    semaphore_V(tfs->lock);
+
+    return 0;
 }
 
 /** @} */

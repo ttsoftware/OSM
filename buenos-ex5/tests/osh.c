@@ -20,6 +20,8 @@ int cmd_show(int, char**);
 int cmd_read(int, char**);
 int cmd_rm(int, char**);
 int cmd_cp(int, char**);
+int cmd_cmp(int, char**);
+int cmd_ls(int, char**);
 int cmd_exit();
 int cmd_help();
 
@@ -29,8 +31,10 @@ cmd_t commands[] = {
     {"read", cmd_read, "read a line from standard in and write it to a new file"},
     {"rm", cmd_rm, "deletes a file if it exists."},
     {"cp", cmd_cp, "copies a file."},
+    {"cmp", cmd_cmp, "compares the contents of two file."},
+    {"ls", cmd_ls, "list directory contents."},
     {"exit", cmd_exit, "exit the buenos shell."},
-    {"help", cmd_help, "show this help message"},
+    {"help", cmd_help, "show this help message"}
 };
 
 #define N_COMMANDS sizeof(commands) / sizeof(cmd_t)
@@ -147,7 +151,7 @@ int cmd_show(int argc, char** argv) {
 }
 
 int cmd_read(int argc, char** argv) {
-    if (argc < 2) {
+    if (argc != 2) {
         printf("Usage: read <file>\n");
         return 1;
     }
@@ -178,14 +182,91 @@ int cmd_read(int argc, char** argv) {
     return 0;
 }
 
+int cmd_ls(int argc, char** argv) {
+    if (argc != 2) {
+        printf("Usage: ls <directory>\n");
+        return 1;
+    }
+
+    char const* volumename = argv[1];
+    
+    int filecount = syscall_filecount(volumename);
+
+    printf("%d\n", filecount);
+
+    char filenames[filecount];
+    for (int i = 0; i < filecount; i++) {
+        syscall_file(volumename, i, filenames);
+    }
+
+    //ls arkimedes
+
+    for (int i = 0; i < filecount; i++) {
+        printf("%d\n", filenames[i]);
+    }
+
+    return 0;
+}
+
+/**
+ *  Display the first byte where the files differ.
+ */
+int cmd_cmp(int argc, char** argv) {
+    if (argc != 3) {
+        printf("Usage: cmp <file1> <file2>\n");
+        return 1;
+    }
+
+    char file1_buffer[1];
+    char file2_buffer[1];
+
+    int file1_handle = syscall_open(argv[1]);
+    int file2_handle = syscall_open(argv[2]);
+
+    int position = 1;
+    int line = 1;
+    int diff = 0;
+    while (syscall_read(file1_handle, &file1_buffer, 1) > 0) {
+        int read = syscall_read(file2_handle, &file2_buffer, 1);
+        // we check if file2 is EOF
+        if (read == 0) {
+            diff++;
+            break;
+        }
+        // we check bytes are equal
+        if (file1_buffer[0] != file2_buffer[0]) {
+            diff++;
+            break;
+        }
+        // check for newline, which coincidentally is ascii number 10
+        if (file1_buffer[0] == 10) {
+            line++;
+        }
+
+        position++;
+    }
+    if (diff > 0) {
+        printf(
+            "Files differ at position %d, line %d\n", 
+            position, 
+            line
+        );   
+    }
+    return 0;
+}
+
+/**
+ * We read through the file to find its length.
+ * We then read it into the buffer, create a new file,
+ * and write the buffer to the new file.
+ */
 int cmd_cp(int argc, char** argv) {
-    if (argc < 2) {
+    if (argc != 2) {
         printf("Usage: cp <file>\n");
         return 1;
     }
 
     char temp_buffer[1];
-
     int handle = syscall_open(argv[1]);
 
     int length = 0;
@@ -195,7 +276,7 @@ int cmd_cp(int argc, char** argv) {
 
     char buffer[length];
     syscall_seek(handle, 0);
-    syscall_read(handle, &buffer, length);
+    syscall_read(handle, &buffer, length); 
 
     handle = syscall_open(argv[2]);
     if (handle == -1) {
@@ -208,7 +289,7 @@ int cmd_cp(int argc, char** argv) {
 }
 
 int cmd_rm(int argc, char** argv) {
-    if (argc < 2) {
+    if (argc != 2) {
         printf("Usage: rm <file>\n");
         return 1;
     }

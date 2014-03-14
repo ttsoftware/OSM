@@ -133,6 +133,12 @@ void syscall_handle(context_t *user_context)
         case SYSCALL_WRITE:
             V0 = syscall_write(A1, (char *)A2, A3);
             break;
+        case SYSCALL_FILECOUNT:
+            V0 = syscall_filecount((char const*) A1);
+            break;
+        case SYSCALL_FILE:
+            V0 = syscall_file((char const*) A1, A2, (char*) A3);
+            break;
         case SYSCALL_SEM_OPEN:
             V0 = (int) syscall_sem_open((const char *) A1,A2);
             break;

@@ -73,7 +73,7 @@ Linker script and memory map
 
                 0x0000000080010000                . = 0x80010000
 
-.text           0x0000000080010000     0xa2b8
+.text           0x0000000080010000     0xa5d8
  *(.text)
  .text          0x0000000080010000       0x60 init/_boot.o
                 0x0000000080010000                _start
@@ -227,325 +227,331 @@ Linker script and memory map
                 0x000000008001582c                process_join
                 0x00000000800159fc                finish_given_process
                 0x0000000080015b80                process_finish
- .text          0x0000000080015c18      0x2dc proc/syscall.o
+ .text          0x0000000080015c18      0x320 proc/syscall.o
                 0x0000000080015c18                syscall_memlimit
                 0x0000000080015cf0                syscall_handle
- .text          0x0000000080015ef4      0x29c proc/semaphore.o
-                0x0000000080015ef4                usr_sem_init
-                0x0000000080015f3c                syscall_sem_open
-                0x0000000080016054                syscall_sem_p
-                0x000000008001609c                syscall_sem_v
-                0x00000000800160e4                syscall_sem_destroy
- .text          0x0000000080016190      0x244 proc/filesystem.o
-                0x0000000080016190                syscall_open
-                0x00000000800161c4                syscall_close
-                0x00000000800161f4                syscall_seek
-                0x0000000080016224                syscall_create
-                0x0000000080016254                syscall_delete
-                0x0000000080016284                syscall_read
-                0x0000000080016328                syscall_write
- .text          0x00000000800163d4      0x550 vm/vm.o
-                0x00000000800163d4                vm_init
-                0x00000000800163f0                vm_create_pagetable
-                0x000000008001643c                vm_destroy_pagetable
-                0x000000008001644c                vm_map
-                0x000000008001677c                vm_unmap
-                0x0000000080016784                vm_set_dirty
- .text          0x0000000080016924      0x278 vm/pagepool.o
-                0x0000000080016924                pagepool_init
-                0x00000000800169f8                pagepool_get_phys_page
-                0x0000000080016ac4                pagepool_free_phys_page
- .text          0x0000000080016b9c      0x178 vm/tlb.o
-                0x0000000080016b9c                vpn_lookup
-                0x0000000080016c10                tlb_modified_exception
-                0x0000000080016c28                tlb_store_exception
-                0x0000000080016d0c                tlb_load_exception
- .text          0x0000000080016d14     0x1150 fs/vfs.o
-                0x0000000080017058                vfs_init
-                0x0000000080017150                vfs_deinit
-                0x00000000800172bc                vfs_mount
-                0x0000000080017450                vfs_mount_fs
-                0x0000000080017550                vfs_mount_all
-                0x00000000800175d8                vfs_unmount
-                0x000000008001774c                vfs_open
-                0x0000000080017928                vfs_close
-                0x00000000800179b8                vfs_seek
-                0x0000000080017a5c                vfs_read
-                0x0000000080017b3c                vfs_write
-                0x0000000080017c1c                vfs_create
-                0x0000000080017d08                vfs_remove
-                0x0000000080017dc8                vfs_getfree
- .text          0x0000000080017e64     0x103c fs/tfs.o
-                0x0000000080017e64                tfs_close
-                0x0000000080017e6c                tfs_unmount
-                0x0000000080017ec4                tfs_open
-                0x0000000080017fcc                tfs_create
-                0x0000000080018328                tfs_remove
-                0x00000000800185b4                tfs_read
-                0x000000008001884c                tfs_write
-                0x0000000080018b8c                tfs_getfree
-                0x0000000080018c60                tfs_init
- .text          0x0000000080018ea0       0xac fs/filesystems.o
-                0x0000000080018ea0                filesystems_try_all
- .text          0x0000000080018f4c      0x5c4 net/network.o
-                0x000000008001906c                network_init
-                0x00000000800191e0                network_get_source_address
-                0x0000000080019218                network_get_broadcast_address
-                0x0000000080019220                network_get_loopback_address
-                0x0000000080019228                network_get_mtu
-                0x00000000800192fc                network_send
-                0x0000000080019500                network_free_frame
- .text          0x0000000080019510       0xc4 net/protocols.o
-                0x0000000080019510                protocols_get_frame_handler
-                0x0000000080019578                protocols_init
- .text          0x00000000800195d4      0x358 net/socket.o
-                0x00000000800195d4                socket_init
-                0x0000000080019694                socket_open
-                0x000000008001987c                socket_close
- .text          0x000000008001992c      0x98c net/pop.o
-                0x0000000080019c34                socket_sendto
-                0x0000000080019e30                socket_recvfrom
-                0x0000000080019f98                pop_init
-                0x000000008001a0ec                pop_push_frame
+ .text          0x0000000080015f38      0x29c proc/semaphore.o
+                0x0000000080015f38                usr_sem_init
+                0x0000000080015f80                syscall_sem_open
+                0x0000000080016098                syscall_sem_p
+                0x00000000800160e0                syscall_sem_v
+                0x0000000080016128                syscall_sem_destroy
+ .text          0x00000000800161d4      0x254 proc/filesystem.o
+                0x00000000800161d4                syscall_open
+                0x0000000080016208                syscall_close
+                0x0000000080016238                syscall_seek
+                0x0000000080016268                syscall_create
+                0x0000000080016298                syscall_delete
+                0x00000000800162c8                syscall_read
+                0x000000008001636c                syscall_write
+                0x0000000080016418                syscall_filecount
+                0x0000000080016420                syscall_file
+ .text          0x0000000080016428      0x550 vm/vm.o
+                0x0000000080016428                vm_init
+                0x0000000080016444                vm_create_pagetable
+                0x0000000080016490                vm_destroy_pagetable
+                0x00000000800164a0                vm_map
+                0x00000000800167d0                vm_unmap
+                0x00000000800167d8                vm_set_dirty
+ .text          0x0000000080016978      0x278 vm/pagepool.o
+                0x0000000080016978                pagepool_init
+                0x0000000080016a4c                pagepool_get_phys_page
+                0x0000000080016b18                pagepool_free_phys_page
+ .text          0x0000000080016bf0      0x178 vm/tlb.o
+                0x0000000080016bf0                vpn_lookup
+                0x0000000080016c64                tlb_modified_exception
+                0x0000000080016c7c                tlb_store_exception
+                0x0000000080016d60                tlb_load_exception
+ .text          0x0000000080016d68     0x129c fs/vfs.o
+                0x00000000800170ac                vfs_init
+                0x00000000800171a4                vfs_deinit
+                0x0000000080017310                vfs_mount
+                0x00000000800174a4                vfs_mount_fs
+                0x00000000800175a4                vfs_mount_all
+                0x000000008001762c                vfs_unmount
+                0x00000000800177a0                vfs_open
+                0x000000008001797c                vfs_close
+                0x0000000080017a0c                vfs_seek
+                0x0000000080017ab0                vfs_read
+                0x0000000080017b90                vfs_write
+                0x0000000080017c70                vfs_create
+                0x0000000080017d5c                vfs_remove
+                0x0000000080017e1c                vfs_getfree
+                0x0000000080017eb8                vfs_filecount
+                0x0000000080017f54                vfs_file
+ .text          0x0000000080018004     0x11bc fs/tfs.o
+                0x0000000080018004                tfs_close
+                0x000000008001800c                tfs_unmount
+                0x0000000080018064                tfs_open
+                0x000000008001816c                tfs_filecount
+                0x0000000080018208                tfs_file
+                0x00000000800182d4                tfs_create
+                0x0000000080018630                tfs_remove
+                0x00000000800188bc                tfs_read
+                0x0000000080018b54                tfs_write
+                0x0000000080018e94                tfs_getfree
+                0x0000000080018f68                tfs_init
+ .text          0x00000000800191c0       0xac fs/filesystems.o
+                0x00000000800191c0                filesystems_try_all
+ .text          0x000000008001926c      0x5c4 net/network.o
+                0x000000008001938c                network_init
+                0x0000000080019500                network_get_source_address
+                0x0000000080019538                network_get_broadcast_address
+                0x0000000080019540                network_get_loopback_address
+                0x0000000080019548                network_get_mtu
+                0x000000008001961c                network_send
+                0x0000000080019820                network_free_frame
+ .text          0x0000000080019830       0xc4 net/protocols.o
+                0x0000000080019830                protocols_get_frame_handler
+                0x0000000080019898                protocols_init
+ .text          0x00000000800198f4      0x358 net/socket.o
+                0x00000000800198f4                socket_init
+                0x00000000800199b4                socket_open
+                0x0000000080019b9c                socket_close
+ .text          0x0000000080019c4c      0x98c net/pop.o
+                0x0000000080019f54                socket_sendto
+                0x000000008001a150                socket_recvfrom
+                0x000000008001a2b8                pop_init
+                0x000000008001a40c                pop_push_frame
 
-.rodata         0x000000008001a2b8     0x15a4
+.rodata         0x000000008001a5d8     0x15a4
  *(.rodata .rodata.*)
  .rodata.str1.4
-                0x000000008001a2b8      0x4f5 init/main.o
+                0x000000008001a5d8      0x4f5 init/main.o
                                         0x4fc (size before relaxing)
- *fill*         0x000000008001a7ad        0x3 
+ *fill*         0x000000008001aacd        0x3 
  .rodata.str1.4
-                0x000000008001a7b0       0x26 kernel/panic.o
+                0x000000008001aad0       0x26 kernel/panic.o
                                          0x28 (size before relaxing)
- *fill*         0x000000008001a7d6        0x2 
+ *fill*         0x000000008001aaf6        0x2 
  .rodata.str1.4
-                0x000000008001a7d8      0x11f kernel/kmalloc.o
+                0x000000008001aaf8      0x11f kernel/kmalloc.o
                                         0x120 (size before relaxing)
- *fill*         0x000000008001a8f7        0x1 
+ *fill*         0x000000008001ac17        0x1 
  .rodata.str1.4
-                0x000000008001a8f8       0xca kernel/interrupt.o
+                0x000000008001ac18       0xca kernel/interrupt.o
                                          0xcc (size before relaxing)
- *fill*         0x000000008001a9c2        0x2 
+ *fill*         0x000000008001ace2        0x2 
  .rodata.str1.4
-                0x000000008001a9c4       0x6b kernel/thread.o
+                0x000000008001ace4       0x6b kernel/thread.o
                                          0x80 (size before relaxing)
- *fill*         0x000000008001aa2f        0x1 
+ *fill*         0x000000008001ad4f        0x1 
  .rodata.str1.4
-                0x000000008001aa30       0x13 kernel/scheduler.o
+                0x000000008001ad50       0x13 kernel/scheduler.o
                                          0x28 (size before relaxing)
- *fill*         0x000000008001aa43        0x1 
+ *fill*         0x000000008001ad63        0x1 
  .rodata.str1.4
-                0x000000008001aa44       0x10 kernel/sleepq.o
+                0x000000008001ad64       0x10 kernel/sleepq.o
                                          0x24 (size before relaxing)
  .rodata.str1.4
-                0x000000008001aa54       0x13 kernel/semaphore.o
+                0x000000008001ad74       0x13 kernel/semaphore.o
                                          0x28 (size before relaxing)
- *fill*         0x000000008001aa67        0x1 
+ *fill*         0x000000008001ad87        0x1 
  .rodata.str1.4
-                0x000000008001aa68      0x20e kernel/exception.o
+                0x000000008001ad88      0x20e kernel/exception.o
                                         0x210 (size before relaxing)
- *fill*         0x000000008001ac76        0x2 
- .rodata        0x000000008001ac78       0x38 kernel/exception.o
+ *fill*         0x000000008001af96        0x2 
+ .rodata        0x000000008001af98       0x38 kernel/exception.o
  .rodata.str1.4
-                0x000000008001acb0       0x54 kernel/halt.o
- .rodata        0x000000008001ad04      0x10c lib/xprintf.o
+                0x000000008001afd0       0x54 kernel/halt.o
+ .rodata        0x000000008001b024      0x10c lib/xprintf.o
  .rodata.str1.4
-                0x000000008001ae10       0x2c lib/bitmap.o
+                0x000000008001b130       0x2c lib/bitmap.o
                                          0x40 (size before relaxing)
  .rodata.str1.4
                 0x0000000000000000       0x2c drivers/bootargs.o
                                           0x4 (size before relaxing)
  .rodata.str1.4
-                0x000000008001ae3c       0xaa drivers/device.o
+                0x000000008001b15c       0xaa drivers/device.o
                                          0xac (size before relaxing)
- *fill*         0x000000008001aee6        0x2 
+ *fill*         0x000000008001b206        0x2 
  .rodata.str1.4
-                0x000000008001aee8       0x51 drivers/drivers.o
+                0x000000008001b208       0x51 drivers/drivers.o
                                          0x54 (size before relaxing)
- *fill*         0x000000008001af39        0x3 
+ *fill*         0x000000008001b259        0x3 
  .rodata.str1.4
-                0x000000008001af3c       0x8e drivers/tty.o
+                0x000000008001b25c       0x8e drivers/tty.o
                                          0x90 (size before relaxing)
- *fill*         0x000000008001afca        0x2 
+ *fill*         0x000000008001b2ea        0x2 
  .rodata.str1.4
-                0x000000008001afcc       0x93 drivers/disk.o
+                0x000000008001b2ec       0x93 drivers/disk.o
                                          0xa8 (size before relaxing)
- *fill*         0x000000008001b05f        0x1 
+ *fill*         0x000000008001b37f        0x1 
  .rodata.str1.4
-                0x000000008001b060      0x12c drivers/metadev.o
+                0x000000008001b380      0x12c drivers/metadev.o
                                         0x140 (size before relaxing)
  .rodata.str1.4
-                0x000000008001b18c       0x11 proc/exception.o
+                0x000000008001b4ac       0x11 proc/exception.o
                                         0x17c (size before relaxing)
- *fill*         0x000000008001b19d        0x3 
- .rodata        0x000000008001b1a0       0x38 proc/exception.o
+ *fill*         0x000000008001b4bd        0x3 
+ .rodata        0x000000008001b4c0       0x38 proc/exception.o
  .rodata.str1.4
-                0x000000008001b1d8       0x2d proc/process.o
+                0x000000008001b4f8       0x2d proc/process.o
                                          0x44 (size before relaxing)
- *fill*         0x000000008001b205        0x3 
+ *fill*         0x000000008001b525        0x3 
  .rodata.str1.4
-                0x000000008001b208       0x27 proc/syscall.o
+                0x000000008001b528       0x27 proc/syscall.o
                                          0x3c (size before relaxing)
- *fill*         0x000000008001b22f        0x1 
+ *fill*         0x000000008001b54f        0x1 
  .rodata.str1.4
-                0x000000008001b230       0x12 proc/filesystem.o
+                0x000000008001b550       0x12 proc/filesystem.o
                                          0x28 (size before relaxing)
- *fill*         0x000000008001b242        0x2 
+ *fill*         0x000000008001b562        0x2 
  .rodata.str1.4
-                0x000000008001b244      0x100 vm/vm.o
+                0x000000008001b564      0x100 vm/vm.o
                                         0x114 (size before relaxing)
  .rodata.str1.4
-                0x000000008001b344       0x6a vm/pagepool.o
+                0x000000008001b664       0x6a vm/pagepool.o
                                          0x80 (size before relaxing)
- *fill*         0x000000008001b3ae        0x2 
+ *fill*         0x000000008001b6ce        0x2 
  .rodata.str1.4
-                0x000000008001b3b0       0x34 vm/tlb.o
+                0x000000008001b6d0       0x34 vm/tlb.o
                                          0xa8 (size before relaxing)
  .rodata.str1.4
-                0x000000008001b3e4      0x2d1 fs/vfs.o
+                0x000000008001b704      0x2d1 fs/vfs.o
                                         0x2e8 (size before relaxing)
- *fill*         0x000000008001b6b5        0x3 
+ *fill*         0x000000008001b9d5        0x3 
  .rodata.str1.4
-                0x000000008001b6b8       0x92 fs/tfs.o
-                                         0x94 (size before relaxing)
- *fill*         0x000000008001b74a        0x2 
+                0x000000008001b9d8       0x92 fs/tfs.o
+                                         0x98 (size before relaxing)
+ *fill*         0x000000008001ba6a        0x2 
  .rodata.str1.4
-                0x000000008001b74c       0x2c fs/filesystems.o
+                0x000000008001ba6c       0x2c fs/filesystems.o
  .rodata.str1.4
-                0x000000008001b778       0x4e net/network.o
+                0x000000008001ba98       0x4e net/network.o
                                          0x64 (size before relaxing)
- *fill*         0x000000008001b7c6        0x2 
+ *fill*         0x000000008001bae6        0x2 
  .rodata.str1.4
-                0x000000008001b7c8       0x3a net/socket.o
+                0x000000008001bae8       0x3a net/socket.o
                                          0x50 (size before relaxing)
- *fill*         0x000000008001b802        0x2 
+ *fill*         0x000000008001bb22        0x2 
  .rodata.str1.4
-                0x000000008001b804       0x58 net/pop.o
+                0x000000008001bb24       0x58 net/pop.o
                                          0x6c (size before relaxing)
 
-.rel.dyn        0x000000008001b85c        0x0
+.rel.dyn        0x000000008001bb7c        0x0
  .rel.dyn       0x0000000000000000        0x0 drivers/drivers.o
 
-.data           0x000000008001b85c       0x90
+.data           0x000000008001bb7c       0x90
  *(.data)
- .data          0x000000008001b85c        0x0 init/_boot.o
- .data          0x000000008001b85c        0x0 kernel/cswitch.o
- .data          0x000000008001b85c        0x0 kernel/_interrupt.o
- .data          0x000000008001b85c        0x0 kernel/_spinlock.o
- .data          0x000000008001b85c        0x0 kernel/idle.o
- .data          0x000000008001b85c        0xc lib/rand.o
- .data          0x000000008001b868        0x0 drivers/_timer.o
- .data          0x000000008001b868        0x0 vm/_tlb.o
- .data          0x000000008001b868        0x0 init/main.o
- .data          0x000000008001b868        0x0 kernel/panic.o
- .data          0x000000008001b868        0x0 kernel/kmalloc.o
- .data          0x000000008001b868        0x0 kernel/interrupt.o
- .data          0x000000008001b868        0x0 kernel/thread.o
- .data          0x000000008001b868        0x8 kernel/scheduler.o
- .data          0x000000008001b870        0x0 kernel/sleepq.o
- .data          0x000000008001b870        0x0 kernel/semaphore.o
- .data          0x000000008001b870        0x0 kernel/exception.o
- .data          0x000000008001b870        0x0 kernel/halt.o
- .data          0x000000008001b870        0x0 lib/libc.o
- .data          0x000000008001b870        0x0 lib/xprintf.o
- .data          0x000000008001b870        0x0 lib/bitmap.o
- .data          0x000000008001b870        0x0 lib/debug.o
- .data          0x000000008001b870        0x0 drivers/polltty.o
- .data          0x000000008001b870        0x0 drivers/timer.o
- .data          0x000000008001b870        0x0 drivers/bootargs.o
- .data          0x000000008001b870        0x0 drivers/device.o
- .data          0x000000008001b870       0x54 drivers/drivers.o
-                0x000000008001b870                drivers_available
- .data          0x000000008001b8c4        0x0 drivers/tty.o
- .data          0x000000008001b8c4        0x0 drivers/disk.o
- .data          0x000000008001b8c4        0x0 drivers/disksched.o
- .data          0x000000008001b8c4        0x0 drivers/metadev.o
- .data          0x000000008001b8c4        0x0 proc/exception.o
- .data          0x000000008001b8c4        0x0 proc/elf.o
- .data          0x000000008001b8c4        0x0 proc/process.o
- .data          0x000000008001b8c4        0x0 proc/syscall.o
- .data          0x000000008001b8c4        0x0 proc/semaphore.o
- .data          0x000000008001b8c4        0x0 proc/filesystem.o
- .data          0x000000008001b8c4        0x0 vm/vm.o
- .data          0x000000008001b8c4        0x0 vm/pagepool.o
- .data          0x000000008001b8c4        0x0 vm/tlb.o
- .data          0x000000008001b8c4        0x0 fs/vfs.o
- .data          0x000000008001b8c4        0x0 fs/tfs.o
- .data          0x000000008001b8c4       0x10 fs/filesystems.o
- .data          0x000000008001b8d4        0x0 net/network.o
- .data          0x000000008001b8d4       0x18 net/protocols.o
-                0x000000008001b8d4                network_protocols
- .data          0x000000008001b8ec        0x0 net/socket.o
- .data          0x000000008001b8ec        0x0 net/pop.o
+ .data          0x000000008001bb7c        0x0 init/_boot.o
+ .data          0x000000008001bb7c        0x0 kernel/cswitch.o
+ .data          0x000000008001bb7c        0x0 kernel/_interrupt.o
+ .data          0x000000008001bb7c        0x0 kernel/_spinlock.o
+ .data          0x000000008001bb7c        0x0 kernel/idle.o
+ .data          0x000000008001bb7c        0xc lib/rand.o
+ .data          0x000000008001bb88        0x0 drivers/_timer.o
+ .data          0x000000008001bb88        0x0 vm/_tlb.o
+ .data          0x000000008001bb88        0x0 init/main.o
+ .data          0x000000008001bb88        0x0 kernel/panic.o
+ .data          0x000000008001bb88        0x0 kernel/kmalloc.o
+ .data          0x000000008001bb88        0x0 kernel/interrupt.o
+ .data          0x000000008001bb88        0x0 kernel/thread.o
+ .data          0x000000008001bb88        0x8 kernel/scheduler.o
+ .data          0x000000008001bb90        0x0 kernel/sleepq.o
+ .data          0x000000008001bb90        0x0 kernel/semaphore.o
+ .data          0x000000008001bb90        0x0 kernel/exception.o
+ .data          0x000000008001bb90        0x0 kernel/halt.o
+ .data          0x000000008001bb90        0x0 lib/libc.o
+ .data          0x000000008001bb90        0x0 lib/xprintf.o
+ .data          0x000000008001bb90        0x0 lib/bitmap.o
+ .data          0x000000008001bb90        0x0 lib/debug.o
+ .data          0x000000008001bb90        0x0 drivers/polltty.o
+ .data          0x000000008001bb90        0x0 drivers/timer.o
+ .data          0x000000008001bb90        0x0 drivers/bootargs.o
+ .data          0x000000008001bb90        0x0 drivers/device.o
+ .data          0x000000008001bb90       0x54 drivers/drivers.o
+                0x000000008001bb90                drivers_available
+ .data          0x000000008001bbe4        0x0 drivers/tty.o
+ .data          0x000000008001bbe4        0x0 drivers/disk.o
+ .data          0x000000008001bbe4        0x0 drivers/disksched.o
+ .data          0x000000008001bbe4        0x0 drivers/metadev.o
+ .data          0x000000008001bbe4        0x0 proc/exception.o
+ .data          0x000000008001bbe4        0x0 proc/elf.o
+ .data          0x000000008001bbe4        0x0 proc/process.o
+ .data          0x000000008001bbe4        0x0 proc/syscall.o
+ .data          0x000000008001bbe4        0x0 proc/semaphore.o
+ .data          0x000000008001bbe4        0x0 proc/filesystem.o
+ .data          0x000000008001bbe4        0x0 vm/vm.o
+ .data          0x000000008001bbe4        0x0 vm/pagepool.o
+ .data          0x000000008001bbe4        0x0 vm/tlb.o
+ .data          0x000000008001bbe4        0x0 fs/vfs.o
+ .data          0x000000008001bbe4        0x0 fs/tfs.o
+ .data          0x000000008001bbe4       0x10 fs/filesystems.o
+ .data          0x000000008001bbf4        0x0 net/network.o
+ .data          0x000000008001bbf4       0x18 net/protocols.o
+                0x000000008001bbf4                network_protocols
+ .data          0x000000008001bc0c        0x0 net/socket.o
+ .data          0x000000008001bc0c        0x0 net/pop.o
 
-.bss            0x000000008001b8ec    0x26138
+.bss            0x000000008001bc0c    0x26138
  *(.bss COMMON)
- .bss           0x000000008001b8ec        0x0 init/_boot.o
- .bss           0x000000008001b8ec        0x0 kernel/cswitch.o
- .bss           0x000000008001b8ec        0x0 kernel/_interrupt.o
- .bss           0x000000008001b8ec        0x0 kernel/_spinlock.o
- .bss           0x000000008001b8ec        0x0 kernel/idle.o
- .bss           0x000000008001b8ec        0x0 lib/rand.o
- .bss           0x000000008001b8ec        0x0 drivers/_timer.o
- .bss           0x000000008001b8ec        0x0 vm/_tlb.o
- .bss           0x000000008001b8ec        0x4 init/main.o
-                0x000000008001b8ec                kernel_bootstrap_finished
- .bss           0x000000008001b8f0        0x0 kernel/panic.o
- .bss           0x000000008001b8f0        0x8 kernel/kmalloc.o
- .bss           0x000000008001b8f8      0x600 kernel/interrupt.o
- COMMON         0x000000008001bef8       0x10 kernel/interrupt.o
-                0x000000008001bef8                interrupt_stacks
- .bss           0x000000008001bf08        0x4 kernel/thread.o
- COMMON         0x000000008001bf0c    0x20804 kernel/thread.o
-                0x000000008001bf0c                thread_table
-                0x000000008001c70c                thread_stack_areas
-                0x000000008003c70c                thread_table_slock
- .bss           0x000000008003c710        0x0 kernel/scheduler.o
- COMMON         0x000000008003c710       0x10 kernel/scheduler.o
-                0x000000008003c710                scheduler_current_thread
- .bss           0x000000008003c720      0x200 kernel/sleepq.o
- .bss           0x000000008003c920      0x608 kernel/semaphore.o
- .bss           0x000000008003cf28        0x0 kernel/exception.o
- .bss           0x000000008003cf28        0x0 kernel/halt.o
- .bss           0x000000008003cf28        0x0 lib/libc.o
- .bss           0x000000008003cf28        0x4 lib/xprintf.o
-                0x000000008003cf28                kprintf_slock
- .bss           0x000000008003cf2c        0x0 lib/bitmap.o
- .bss           0x000000008003cf2c        0x0 lib/debug.o
- .bss           0x000000008003cf2c        0x4 drivers/polltty.o
- .bss           0x000000008003cf30        0x0 drivers/timer.o
- .bss           0x000000008003cf30      0x100 drivers/bootargs.o
- .bss           0x000000008003d030      0x204 drivers/device.o
- .bss           0x000000008003d234        0x0 drivers/drivers.o
- .bss           0x000000008003d234        0x4 drivers/tty.o
- .bss           0x000000008003d238        0x0 drivers/disk.o
- .bss           0x000000008003d238        0x0 drivers/disksched.o
- .bss           0x000000008003d238       0x48 drivers/metadev.o
- .bss           0x000000008003d280        0x0 proc/exception.o
- .bss           0x000000008003d280        0x0 proc/elf.o
- .bss           0x000000008003d280        0x0 proc/process.o
- COMMON         0x000000008003d280      0x504 proc/process.o
-                0x000000008003d280                process_table_slock
-                0x000000008003d284                process_table
- .bss           0x000000008003d784        0x0 proc/syscall.o
- .bss           0x000000008003d784     0x2004 proc/semaphore.o
- .bss           0x000000008003f788        0x0 proc/filesystem.o
- .bss           0x000000008003f788        0x0 vm/vm.o
- .bss           0x000000008003f788       0x14 vm/pagepool.o
- .bss           0x000000008003f79c        0x0 vm/tlb.o
- .bss           0x000000008003f79c     0x18b8 fs/vfs.o
- .bss           0x0000000080041054        0x0 fs/tfs.o
- .bss           0x0000000080041054        0x0 fs/filesystems.o
- .bss           0x0000000080041054        0x0 net/network.o
- COMMON         0x0000000080041054       0x30 net/network.o
-                0x0000000080041054                network_interfaces
- .bss           0x0000000080041084        0x0 net/protocols.o
- .bss           0x0000000080041084        0x4 net/socket.o
- COMMON         0x0000000080041088      0x704 net/socket.o
-                0x0000000080041088                open_sockets
-                0x0000000080041788                open_sockets_sem
- .bss           0x000000008004178c      0x298 net/pop.o
-                0x0000000080041a24                KERNEL_ENDS_HERE = .
+ .bss           0x000000008001bc0c        0x0 init/_boot.o
+ .bss           0x000000008001bc0c        0x0 kernel/cswitch.o
+ .bss           0x000000008001bc0c        0x0 kernel/_interrupt.o
+ .bss           0x000000008001bc0c        0x0 kernel/_spinlock.o
+ .bss           0x000000008001bc0c        0x0 kernel/idle.o
+ .bss           0x000000008001bc0c        0x0 lib/rand.o
+ .bss           0x000000008001bc0c        0x0 drivers/_timer.o
+ .bss           0x000000008001bc0c        0x0 vm/_tlb.o
+ .bss           0x000000008001bc0c        0x4 init/main.o
+                0x000000008001bc0c                kernel_bootstrap_finished
+ .bss           0x000000008001bc10        0x0 kernel/panic.o
+ .bss           0x000000008001bc10        0x8 kernel/kmalloc.o
+ .bss           0x000000008001bc18      0x600 kernel/interrupt.o
+ COMMON         0x000000008001c218       0x10 kernel/interrupt.o
+                0x000000008001c218                interrupt_stacks
+ .bss           0x000000008001c228        0x4 kernel/thread.o
+ COMMON         0x000000008001c22c    0x20804 kernel/thread.o
+                0x000000008001c22c                thread_table
+                0x000000008001ca2c                thread_stack_areas
+                0x000000008003ca2c                thread_table_slock
+ .bss           0x000000008003ca30        0x0 kernel/scheduler.o
+ COMMON         0x000000008003ca30       0x10 kernel/scheduler.o
+                0x000000008003ca30                scheduler_current_thread
+ .bss           0x000000008003ca40      0x200 kernel/sleepq.o
+ .bss           0x000000008003cc40      0x608 kernel/semaphore.o
+ .bss           0x000000008003d248        0x0 kernel/exception.o
+ .bss           0x000000008003d248        0x0 kernel/halt.o
+ .bss           0x000000008003d248        0x0 lib/libc.o
+ .bss           0x000000008003d248        0x4 lib/xprintf.o
+                0x000000008003d248                kprintf_slock
+ .bss           0x000000008003d24c        0x0 lib/bitmap.o
+ .bss           0x000000008003d24c        0x0 lib/debug.o
+ .bss           0x000000008003d24c        0x4 drivers/polltty.o
+ .bss           0x000000008003d250        0x0 drivers/timer.o
+ .bss           0x000000008003d250      0x100 drivers/bootargs.o
+ .bss           0x000000008003d350      0x204 drivers/device.o
+ .bss           0x000000008003d554        0x0 drivers/drivers.o
+ .bss           0x000000008003d554        0x4 drivers/tty.o
+ .bss           0x000000008003d558        0x0 drivers/disk.o
+ .bss           0x000000008003d558        0x0 drivers/disksched.o
+ .bss           0x000000008003d558       0x48 drivers/metadev.o
+ .bss           0x000000008003d5a0        0x0 proc/exception.o
+ .bss           0x000000008003d5a0        0x0 proc/elf.o
+ .bss           0x000000008003d5a0        0x0 proc/process.o
+ COMMON         0x000000008003d5a0      0x504 proc/process.o
+                0x000000008003d5a0                process_table_slock
+                0x000000008003d5a4                process_table
+ .bss           0x000000008003daa4        0x0 proc/syscall.o
+ .bss           0x000000008003daa4     0x2004 proc/semaphore.o
+ .bss           0x000000008003faa8        0x0 proc/filesystem.o
+ .bss           0x000000008003faa8        0x0 vm/vm.o
+ .bss           0x000000008003faa8       0x14 vm/pagepool.o
+ .bss           0x000000008003fabc        0x0 vm/tlb.o
+ .bss           0x000000008003fabc     0x18b8 fs/vfs.o
+ .bss           0x0000000080041374        0x0 fs/tfs.o
+ .bss           0x0000000080041374        0x0 fs/filesystems.o
+ .bss           0x0000000080041374        0x0 net/network.o
+ COMMON         0x0000000080041374       0x30 net/network.o
+                0x0000000080041374                network_interfaces
+ .bss           0x00000000800413a4        0x0 net/protocols.o
+ .bss           0x00000000800413a4        0x4 net/socket.o
+ COMMON         0x00000000800413a8      0x704 net/socket.o
+                0x00000000800413a8                open_sockets
+                0x0000000080041aa8                open_sockets_sem
+ .bss           0x0000000080041aac      0x298 net/pop.o
+                0x0000000080041d44                KERNEL_ENDS_HERE = .
 LOAD init/_boot.o
 LOAD kernel/cswitch.o
 LOAD kernel/_interrupt.o
@@ -598,7 +604,7 @@ OUTPUT(buenos elf32-bigmips)
 .reginfo        0x0000000000000000       0x18
  .reginfo       0x0000000000000000       0x18 init/_boot.o
 
-.pdr            0x0000000000000000     0x1a20
+.pdr            0x0000000000000000     0x1ae0
  .pdr           0x0000000000000000       0x40 init/_boot.o
  .pdr           0x0000000000000040       0xa0 kernel/cswitch.o
  .pdr           0x00000000000000e0      0x180 kernel/_interrupt.o
@@ -635,17 +641,17 @@ OUTPUT(buenos elf32-bigmips)
  .pdr           0x0000000000000f80      0x140 proc/process.o
  .pdr           0x00000000000010c0       0x40 proc/syscall.o
  .pdr           0x0000000000001100       0xa0 proc/semaphore.o
- .pdr           0x00000000000011a0       0xe0 proc/filesystem.o
- .pdr           0x0000000000001280       0xc0 vm/vm.o
- .pdr           0x0000000000001340       0x60 vm/pagepool.o
- .pdr           0x00000000000013a0       0x80 vm/tlb.o
- .pdr           0x0000000000001420      0x260 fs/vfs.o
- .pdr           0x0000000000001680      0x120 fs/tfs.o
- .pdr           0x00000000000017a0       0x20 fs/filesystems.o
- .pdr           0x00000000000017c0      0x120 net/network.o
- .pdr           0x00000000000018e0       0x40 net/protocols.o
- .pdr           0x0000000000001920       0x60 net/socket.o
- .pdr           0x0000000000001980       0xa0 net/pop.o
+ .pdr           0x00000000000011a0      0x120 proc/filesystem.o
+ .pdr           0x00000000000012c0       0xc0 vm/vm.o
+ .pdr           0x0000000000001380       0x60 vm/pagepool.o
+ .pdr           0x00000000000013e0       0x80 vm/tlb.o
+ .pdr           0x0000000000001460      0x2a0 fs/vfs.o
+ .pdr           0x0000000000001700      0x160 fs/tfs.o
+ .pdr           0x0000000000001860       0x20 fs/filesystems.o
+ .pdr           0x0000000000001880      0x120 net/network.o
+ .pdr           0x00000000000019a0       0x40 net/protocols.o
+ .pdr           0x00000000000019e0       0x60 net/socket.o
+ .pdr           0x0000000000001a40       0xa0 net/pop.o
 
 .mdebug.abi32   0x0000000000000000        0x0
  .mdebug.abi32  0x0000000000000000        0x0 init/main.o
@@ -831,7 +837,7 @@ OUTPUT(buenos elf32-bigmips)
 .stabstr        0x0000000000000000      0x3a9
  .stabstr       0x0000000000000000      0x3a9 init/_boot.o
 
-.debug_info     0x0000000000000000     0xe8da
+.debug_info     0x0000000000000000     0xed45
  .debug_info    0x0000000000000000      0xb36 init/main.o
  .debug_info    0x0000000000000b36      0x16e kernel/panic.o
  .debug_info    0x0000000000000ca4      0x33d kernel/kmalloc.o
@@ -858,21 +864,21 @@ OUTPUT(buenos elf32-bigmips)
  .debug_info    0x0000000000006a83      0x58d proc/exception.o
  .debug_info    0x0000000000007010      0x3d0 proc/elf.o
  .debug_info    0x00000000000073e0     0x11d1 proc/process.o
- .debug_info    0x00000000000085b1      0x7e3 proc/syscall.o
- .debug_info    0x0000000000008d94      0x45e proc/semaphore.o
- .debug_info    0x00000000000091f2      0x65d proc/filesystem.o
- .debug_info    0x000000000000984f      0x49b vm/vm.o
- .debug_info    0x0000000000009cea      0x49f vm/pagepool.o
- .debug_info    0x000000000000a189      0x562 vm/tlb.o
- .debug_info    0x000000000000a6eb     0x14b7 fs/vfs.o
- .debug_info    0x000000000000bba2      0xfa4 fs/tfs.o
- .debug_info    0x000000000000cb46      0x501 fs/filesystems.o
- .debug_info    0x000000000000d047      0x9de net/network.o
- .debug_info    0x000000000000da25      0x170 net/protocols.o
- .debug_info    0x000000000000db95      0x3cb net/socket.o
- .debug_info    0x000000000000df60      0x97a net/pop.o
+ .debug_info    0x00000000000085b1      0x829 proc/syscall.o
+ .debug_info    0x0000000000008dda      0x45e proc/semaphore.o
+ .debug_info    0x0000000000009238      0x731 proc/filesystem.o
+ .debug_info    0x0000000000009969      0x49b vm/vm.o
+ .debug_info    0x0000000000009e04      0x49f vm/pagepool.o
+ .debug_info    0x000000000000a2a3      0x562 vm/tlb.o
+ .debug_info    0x000000000000a805     0x164c fs/vfs.o
+ .debug_info    0x000000000000be51     0x1129 fs/tfs.o
+ .debug_info    0x000000000000cf7a      0x538 fs/filesystems.o
+ .debug_info    0x000000000000d4b2      0x9de net/network.o
+ .debug_info    0x000000000000de90      0x170 net/protocols.o
+ .debug_info    0x000000000000e000      0x3cb net/socket.o
+ .debug_info    0x000000000000e3cb      0x97a net/pop.o
 
-.debug_abbrev   0x0000000000000000     0x44f5
+.debug_abbrev   0x0000000000000000     0x4517
  .debug_abbrev  0x0000000000000000      0x1ef init/main.o
  .debug_abbrev  0x00000000000001ef       0xf6 kernel/panic.o
  .debug_abbrev  0x00000000000002e5      0x1be kernel/kmalloc.o
@@ -901,19 +907,19 @@ OUTPUT(buenos elf32-bigmips)
  .debug_abbrev  0x0000000000002880      0x36c proc/process.o
  .debug_abbrev  0x0000000000002bec      0x1e0 proc/syscall.o
  .debug_abbrev  0x0000000000002dcc      0x17a proc/semaphore.o
- .debug_abbrev  0x0000000000002f46      0x16e proc/filesystem.o
- .debug_abbrev  0x00000000000030b4      0x1d4 vm/vm.o
- .debug_abbrev  0x0000000000003288      0x178 vm/pagepool.o
- .debug_abbrev  0x0000000000003400      0x239 vm/tlb.o
- .debug_abbrev  0x0000000000003639      0x31e fs/vfs.o
- .debug_abbrev  0x0000000000003957      0x269 fs/tfs.o
- .debug_abbrev  0x0000000000003bc0      0x154 fs/filesystems.o
- .debug_abbrev  0x0000000000003d14      0x34d net/network.o
- .debug_abbrev  0x0000000000004061       0xf3 net/protocols.o
- .debug_abbrev  0x0000000000004154      0x196 net/socket.o
- .debug_abbrev  0x00000000000042ea      0x20b net/pop.o
+ .debug_abbrev  0x0000000000002f46      0x17c proc/filesystem.o
+ .debug_abbrev  0x00000000000030c2      0x1d4 vm/vm.o
+ .debug_abbrev  0x0000000000003296      0x178 vm/pagepool.o
+ .debug_abbrev  0x000000000000340e      0x239 vm/tlb.o
+ .debug_abbrev  0x0000000000003647      0x31e fs/vfs.o
+ .debug_abbrev  0x0000000000003965      0x27d fs/tfs.o
+ .debug_abbrev  0x0000000000003be2      0x154 fs/filesystems.o
+ .debug_abbrev  0x0000000000003d36      0x34d net/network.o
+ .debug_abbrev  0x0000000000004083       0xf3 net/protocols.o
+ .debug_abbrev  0x0000000000004176      0x196 net/socket.o
+ .debug_abbrev  0x000000000000430c      0x20b net/pop.o
 
-.debug_loc      0x0000000000000000     0x7890
+.debug_loc      0x0000000000000000     0x7c7b
  .debug_loc     0x0000000000000000      0x115 init/main.o
  .debug_loc     0x0000000000000115       0x97 kernel/panic.o
  .debug_loc     0x00000000000001ac       0xed kernel/kmalloc.o
@@ -937,19 +943,19 @@ OUTPUT(buenos elf32-bigmips)
  .debug_loc     0x0000000000003de7       0x55 proc/exception.o
  .debug_loc     0x0000000000003e3c       0xb8 proc/elf.o
  .debug_loc     0x0000000000003ef4      0x652 proc/process.o
- .debug_loc     0x0000000000004546      0x3a0 proc/syscall.o
- .debug_loc     0x00000000000048e6      0x192 proc/semaphore.o
- .debug_loc     0x0000000000004a78      0x3c1 proc/filesystem.o
- .debug_loc     0x0000000000004e39      0x2a7 vm/vm.o
- .debug_loc     0x00000000000050e0      0x143 vm/pagepool.o
- .debug_loc     0x0000000000005223       0xc3 vm/tlb.o
- .debug_loc     0x00000000000052e6      0xb9c fs/vfs.o
- .debug_loc     0x0000000000005e82      0xb4a fs/tfs.o
- .debug_loc     0x00000000000069cc       0xa7 fs/filesystems.o
- .debug_loc     0x0000000000006a73      0x680 net/network.o
- .debug_loc     0x00000000000070f3       0x7f net/protocols.o
- .debug_loc     0x0000000000007172      0x188 net/socket.o
- .debug_loc     0x00000000000072fa      0x596 net/pop.o
+ .debug_loc     0x0000000000004546      0x3e2 proc/syscall.o
+ .debug_loc     0x0000000000004928      0x192 proc/semaphore.o
+ .debug_loc     0x0000000000004aba      0x445 proc/filesystem.o
+ .debug_loc     0x0000000000004eff      0x2a7 vm/vm.o
+ .debug_loc     0x00000000000051a6      0x143 vm/pagepool.o
+ .debug_loc     0x00000000000052e9       0xc3 vm/tlb.o
+ .debug_loc     0x00000000000053ac      0xd20 fs/vfs.o
+ .debug_loc     0x00000000000060cc      0xceb fs/tfs.o
+ .debug_loc     0x0000000000006db7       0xa7 fs/filesystems.o
+ .debug_loc     0x0000000000006e5e      0x680 net/network.o
+ .debug_loc     0x00000000000074de       0x7f net/protocols.o
+ .debug_loc     0x000000000000755d      0x188 net/socket.o
+ .debug_loc     0x00000000000076e5      0x596 net/pop.o
 
 .debug_aranges  0x0000000000000000      0x4d8
  .debug_aranges
@@ -1031,7 +1037,7 @@ OUTPUT(buenos elf32-bigmips)
  .debug_aranges
                 0x00000000000004b8       0x20 net/pop.o
 
-.debug_ranges   0x0000000000000000      0x418
+.debug_ranges   0x0000000000000000      0x430
  .debug_ranges  0x0000000000000000       0x20 init/main.o
  .debug_ranges  0x0000000000000020       0x28 kernel/thread.o
  .debug_ranges  0x0000000000000048       0x20 kernel/scheduler.o
@@ -1044,10 +1050,11 @@ OUTPUT(buenos elf32-bigmips)
  .debug_ranges  0x0000000000000270       0x40 proc/filesystem.o
  .debug_ranges  0x00000000000002b0       0x60 vm/tlb.o
  .debug_ranges  0x0000000000000310       0x40 fs/vfs.o
- .debug_ranges  0x0000000000000350       0xb0 net/network.o
- .debug_ranges  0x0000000000000400       0x18 net/socket.o
+ .debug_ranges  0x0000000000000350       0x18 fs/tfs.o
+ .debug_ranges  0x0000000000000368       0xb0 net/network.o
+ .debug_ranges  0x0000000000000418       0x18 net/socket.o
 
-.debug_line     0x0000000000000000     0x375f
+.debug_line     0x0000000000000000     0x37cf
  .debug_line    0x0000000000000000      0x21b init/main.o
  .debug_line    0x000000000000021b       0x90 kernel/panic.o
  .debug_line    0x00000000000002ab       0xe5 kernel/kmalloc.o
@@ -1074,101 +1081,101 @@ OUTPUT(buenos elf32-bigmips)
  .debug_line    0x0000000000001bf6       0xf2 proc/exception.o
  .debug_line    0x0000000000001ce8       0xd4 proc/elf.o
  .debug_line    0x0000000000001dbc      0x317 proc/process.o
- .debug_line    0x00000000000020d3      0x178 proc/syscall.o
- .debug_line    0x000000000000224b      0x118 proc/semaphore.o
- .debug_line    0x0000000000002363      0x111 proc/filesystem.o
- .debug_line    0x0000000000002474      0x17b vm/vm.o
- .debug_line    0x00000000000025ef      0x111 vm/pagepool.o
- .debug_line    0x0000000000002700       0xe3 vm/tlb.o
- .debug_line    0x00000000000027e3      0x39a fs/vfs.o
- .debug_line    0x0000000000002b7d      0x3f9 fs/tfs.o
- .debug_line    0x0000000000002f76       0xea fs/filesystems.o
- .debug_line    0x0000000000003060      0x20c net/network.o
- .debug_line    0x000000000000326c       0x92 net/protocols.o
- .debug_line    0x00000000000032fe      0x173 net/socket.o
- .debug_line    0x0000000000003471      0x2ee net/pop.o
+ .debug_line    0x00000000000020d3      0x17e proc/syscall.o
+ .debug_line    0x0000000000002251      0x118 proc/semaphore.o
+ .debug_line    0x0000000000002369      0x117 proc/filesystem.o
+ .debug_line    0x0000000000002480      0x17b vm/vm.o
+ .debug_line    0x00000000000025fb      0x111 vm/pagepool.o
+ .debug_line    0x000000000000270c       0xe3 vm/tlb.o
+ .debug_line    0x00000000000027ef      0x3c4 fs/vfs.o
+ .debug_line    0x0000000000002bb3      0x433 fs/tfs.o
+ .debug_line    0x0000000000002fe6       0xea fs/filesystems.o
+ .debug_line    0x00000000000030d0      0x20c net/network.o
+ .debug_line    0x00000000000032dc       0x92 net/protocols.o
+ .debug_line    0x000000000000336e      0x173 net/socket.o
+ .debug_line    0x00000000000034e1      0x2ee net/pop.o
 
-.debug_str      0x0000000000000000     0x1d69
- .debug_str     0x0000000000000000      0x349 init/main.o
-                                        0x3b0 (size before relaxing)
- .debug_str     0x0000000000000349       0x45 kernel/panic.o
-                                        0x140 (size before relaxing)
- .debug_str     0x000000000000038e       0xb4 kernel/kmalloc.o
-                                        0x1e6 (size before relaxing)
- .debug_str     0x0000000000000442       0xf8 kernel/interrupt.o
-                                        0x29c (size before relaxing)
- .debug_str     0x000000000000053a      0x264 kernel/thread.o
-                                        0x436 (size before relaxing)
- .debug_str     0x000000000000079e       0x72 kernel/scheduler.o
-                                        0x3cf (size before relaxing)
- .debug_str     0x0000000000000810       0x8e kernel/sleepq.o
-                                        0x3ae (size before relaxing)
- .debug_str     0x000000000000089e       0x8f kernel/semaphore.o
-                                        0x249 (size before relaxing)
- .debug_str     0x000000000000092d       0xe1 kernel/exception.o
-                                        0x211 (size before relaxing)
- .debug_str     0x0000000000000a0e       0x19 kernel/halt.o
-                                         0xfa (size before relaxing)
- .debug_str     0x0000000000000a27       0x74 lib/libc.o
-                                        0x164 (size before relaxing)
- .debug_str     0x0000000000000a9b       0x95 lib/xprintf.o
-                                        0x218 (size before relaxing)
- .debug_str     0x0000000000000b30       0x6e lib/bitmap.o
-                                        0x142 (size before relaxing)
- .debug_str     0x0000000000000b9e       0x27 lib/debug.o
-                                        0x11e (size before relaxing)
- .debug_str     0x0000000000000bc5       0x3c drivers/polltty.o
-                                        0x17d (size before relaxing)
- .debug_str     0x0000000000000c01       0x21 drivers/timer.o
-                                        0x142 (size before relaxing)
- .debug_str     0x0000000000000c22       0x5c drivers/bootargs.o
-                                        0x155 (size before relaxing)
- .debug_str     0x0000000000000c7e       0x74 drivers/device.o
-                                        0x1de (size before relaxing)
- .debug_str     0x0000000000000cf2       0x12 drivers/drivers.o
-                                        0x18e (size before relaxing)
- .debug_str     0x0000000000000d04       0xa4 drivers/tty.o
-                                        0x32c (size before relaxing)
- .debug_str     0x0000000000000da8      0x195 drivers/disk.o
-                                        0x454 (size before relaxing)
- .debug_str     0x0000000000000f3d       0x14 drivers/disksched.o
-                                        0x1ad (size before relaxing)
- .debug_str     0x0000000000000f51      0x121 drivers/metadev.o
-                                        0x37c (size before relaxing)
- .debug_str     0x0000000000001072       0x3f proc/exception.o
-                                        0x342 (size before relaxing)
- .debug_str     0x00000000000010b1      0x1a5 proc/elf.o
-                                        0x278 (size before relaxing)
- .debug_str     0x0000000000001256      0x1e8 proc/process.o
-                                        0x648 (size before relaxing)
- .debug_str     0x000000000000143e      0x101 proc/syscall.o
-                                        0x499 (size before relaxing)
- .debug_str     0x000000000000153f       0x33 proc/semaphore.o
-                                        0x26f (size before relaxing)
- .debug_str     0x0000000000001572       0x60 proc/filesystem.o
-                                        0x291 (size before relaxing)
- .debug_str     0x00000000000015d2       0x40 vm/vm.o
-                                        0x214 (size before relaxing)
- .debug_str     0x0000000000001612       0x70 vm/pagepool.o
-                                        0x2a3 (size before relaxing)
- .debug_str     0x0000000000001682       0x26 vm/tlb.o
-                                        0x326 (size before relaxing)
- .debug_str     0x00000000000016a8      0x18f fs/vfs.o
-                                        0x4fd (size before relaxing)
- .debug_str     0x0000000000001837       0xd2 fs/tfs.o
-                                        0x47f (size before relaxing)
- .debug_str     0x0000000000001909       0x34 fs/filesystems.o
-                                        0x2fb (size before relaxing)
- .debug_str     0x000000000000193d      0x222 net/network.o
-                                        0x43b (size before relaxing)
- .debug_str     0x0000000000001b5f       0x36 net/protocols.o
-                                        0x166 (size before relaxing)
- .debug_str     0x0000000000001b95       0xa1 net/socket.o
-                                        0x225 (size before relaxing)
- .debug_str     0x0000000000001c36      0x133 net/pop.o
-                                        0x3b9 (size before relaxing)
+.debug_str      0x0000000000000000     0x1dc2
+ .debug_str     0x0000000000000000      0x355 init/main.o
+                                        0x3bc (size before relaxing)
+ .debug_str     0x0000000000000355       0x45 kernel/panic.o
+                                        0x14c (size before relaxing)
+ .debug_str     0x000000000000039a       0xb4 kernel/kmalloc.o
+                                        0x1f2 (size before relaxing)
+ .debug_str     0x000000000000044e       0xf8 kernel/interrupt.o
+                                        0x2a8 (size before relaxing)
+ .debug_str     0x0000000000000546      0x264 kernel/thread.o
+                                        0x442 (size before relaxing)
+ .debug_str     0x00000000000007aa       0x72 kernel/scheduler.o
+                                        0x3db (size before relaxing)
+ .debug_str     0x000000000000081c       0x8e kernel/sleepq.o
+                                        0x3ba (size before relaxing)
+ .debug_str     0x00000000000008aa       0x8f kernel/semaphore.o
+                                        0x255 (size before relaxing)
+ .debug_str     0x0000000000000939       0xe1 kernel/exception.o
+                                        0x21d (size before relaxing)
+ .debug_str     0x0000000000000a1a       0x19 kernel/halt.o
+                                        0x106 (size before relaxing)
+ .debug_str     0x0000000000000a33       0x74 lib/libc.o
+                                        0x170 (size before relaxing)
+ .debug_str     0x0000000000000aa7       0x95 lib/xprintf.o
+                                        0x224 (size before relaxing)
+ .debug_str     0x0000000000000b3c       0x6e lib/bitmap.o
+                                        0x14e (size before relaxing)
+ .debug_str     0x0000000000000baa       0x27 lib/debug.o
+                                        0x12a (size before relaxing)
+ .debug_str     0x0000000000000bd1       0x3c drivers/polltty.o
+                                        0x189 (size before relaxing)
+ .debug_str     0x0000000000000c0d       0x21 drivers/timer.o
+                                        0x14e (size before relaxing)
+ .debug_str     0x0000000000000c2e       0x5c drivers/bootargs.o
+                                        0x161 (size before relaxing)
+ .debug_str     0x0000000000000c8a       0x74 drivers/device.o
+                                        0x1ea (size before relaxing)
+ .debug_str     0x0000000000000cfe       0x12 drivers/drivers.o
+                                        0x19a (size before relaxing)
+ .debug_str     0x0000000000000d10       0xa4 drivers/tty.o
+                                        0x338 (size before relaxing)
+ .debug_str     0x0000000000000db4      0x195 drivers/disk.o
+                                        0x460 (size before relaxing)
+ .debug_str     0x0000000000000f49       0x14 drivers/disksched.o
+                                        0x1b9 (size before relaxing)
+ .debug_str     0x0000000000000f5d      0x121 drivers/metadev.o
+                                        0x388 (size before relaxing)
+ .debug_str     0x000000000000107e       0x3f proc/exception.o
+                                        0x34e (size before relaxing)
+ .debug_str     0x00000000000010bd      0x1a5 proc/elf.o
+                                        0x284 (size before relaxing)
+ .debug_str     0x0000000000001262      0x1e8 proc/process.o
+                                        0x654 (size before relaxing)
+ .debug_str     0x000000000000144a      0x120 proc/syscall.o
+                                        0x4c4 (size before relaxing)
+ .debug_str     0x000000000000156a       0x33 proc/semaphore.o
+                                        0x27b (size before relaxing)
+ .debug_str     0x000000000000159d       0x77 proc/filesystem.o
+                                        0x2de (size before relaxing)
+ .debug_str     0x0000000000001614       0x40 vm/vm.o
+                                        0x220 (size before relaxing)
+ .debug_str     0x0000000000001654       0x70 vm/pagepool.o
+                                        0x2af (size before relaxing)
+ .debug_str     0x00000000000016c4       0x26 vm/tlb.o
+                                        0x332 (size before relaxing)
+ .debug_str     0x00000000000016ea      0x18f fs/vfs.o
+                                        0x530 (size before relaxing)
+ .debug_str     0x0000000000001879       0xe9 fs/tfs.o
+                                        0x4b1 (size before relaxing)
+ .debug_str     0x0000000000001962       0x34 fs/filesystems.o
+                                        0x316 (size before relaxing)
+ .debug_str     0x0000000000001996      0x222 net/network.o
+                                        0x447 (size before relaxing)
+ .debug_str     0x0000000000001bb8       0x36 net/protocols.o
+                                        0x172 (size before relaxing)
+ .debug_str     0x0000000000001bee       0xa1 net/socket.o
+                                        0x231 (size before relaxing)
+ .debug_str     0x0000000000001c8f      0x133 net/pop.o
+                                        0x3c5 (size before relaxing)
 
-.debug_frame    0x0000000000000000     0x1bfc
+.debug_frame    0x0000000000000000     0x1cd0
  .debug_frame   0x0000000000000000       0x90 init/main.o
  .debug_frame   0x0000000000000090       0x38 kernel/panic.o
  .debug_frame   0x00000000000000c8       0x9c kernel/kmalloc.o
@@ -1196,17 +1203,17 @@ OUTPUT(buenos elf32-bigmips)
  .debug_frame   0x0000000000000df0      0x1ac proc/process.o
  .debug_frame   0x0000000000000f9c       0x6c proc/syscall.o
  .debug_frame   0x0000000000001008       0xcc proc/semaphore.o
- .debug_frame   0x00000000000010d4      0x104 proc/filesystem.o
- .debug_frame   0x00000000000011d8       0xf0 vm/vm.o
- .debug_frame   0x00000000000012c8       0x8c vm/pagepool.o
- .debug_frame   0x0000000000001354       0x64 vm/tlb.o
- .debug_frame   0x00000000000013b8      0x344 fs/vfs.o
- .debug_frame   0x00000000000016fc      0x1d0 fs/tfs.o
- .debug_frame   0x00000000000018cc       0x40 fs/filesystems.o
- .debug_frame   0x000000000000190c      0x110 net/network.o
- .debug_frame   0x0000000000001a1c       0x40 net/protocols.o
- .debug_frame   0x0000000000001a5c       0xa4 net/socket.o
- .debug_frame   0x0000000000001b00       0xfc net/pop.o
+ .debug_frame   0x00000000000010d4      0x124 proc/filesystem.o
+ .debug_frame   0x00000000000011f8       0xf0 vm/vm.o
+ .debug_frame   0x00000000000012e8       0x8c vm/pagepool.o
+ .debug_frame   0x0000000000001374       0x64 vm/tlb.o
+ .debug_frame   0x00000000000013d8      0x394 fs/vfs.o
+ .debug_frame   0x000000000000176c      0x234 fs/tfs.o
+ .debug_frame   0x00000000000019a0       0x40 fs/filesystems.o
+ .debug_frame   0x00000000000019e0      0x110 net/network.o
+ .debug_frame   0x0000000000001af0       0x40 net/protocols.o
+ .debug_frame   0x0000000000001b30       0xa4 net/socket.o
+ .debug_frame   0x0000000000001bd4       0xfc net/pop.o
 
 Cross Reference Table
 
@@ -1624,6 +1631,10 @@ syscall_create                                    proc/filesystem.o
                                                   proc/syscall.o
 syscall_delete                                    proc/filesystem.o
                                                   proc/syscall.o
+syscall_file                                      proc/filesystem.o
+                                                  proc/syscall.o
+syscall_filecount                                 proc/filesystem.o
+                                                  proc/syscall.o
 syscall_handle                                    proc/syscall.o
                                                   proc/exception.o
 syscall_memlimit                                  proc/syscall.o
@@ -1645,6 +1656,8 @@ syscall_write                                     proc/filesystem.o
                                                   proc/syscall.o
 tfs_close                                         fs/tfs.o
 tfs_create                                        fs/tfs.o
+tfs_file                                          fs/tfs.o
+tfs_filecount                                     fs/tfs.o
 tfs_getfree                                       fs/tfs.o
 tfs_init                                          fs/tfs.o
                                                   fs/filesystems.o
@@ -1716,6 +1729,10 @@ vfs_create                                        fs/vfs.o
                                                   proc/filesystem.o
 vfs_deinit                                        fs/vfs.o
                                                   kernel/halt.o
+vfs_file                                          fs/vfs.o
+                                                  proc/filesystem.o
+vfs_filecount                                     fs/vfs.o
+                                                  proc/filesystem.o
 vfs_getfree                                       fs/vfs.o
 vfs_init                                          fs/vfs.o
                                                   init/main.o

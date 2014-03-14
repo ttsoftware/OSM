@@ -33,5 +33,12 @@ int main(void) {
 
 	syscall_close(handle);
 
+	char file3[] = "[arkimedes]putin";
+	syscall_create((char const*) &file3, 11);
+	handle = syscall_open((char const*) &file3);	
+
+	char buffer4[] = "\ngorbad\n";
+	syscall_write(handle, &buffer4, 11);
+	
 	return 0;
 }

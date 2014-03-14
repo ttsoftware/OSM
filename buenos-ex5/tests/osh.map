@@ -20,14 +20,14 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x3590
+ro_segment      0x0000000000001000     0x3a30
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
                 0x0000000000001018                __main
  .text          0x0000000000001024        0xc _syscall.o
                 0x0000000000001024                _syscall
- .text          0x0000000000001030     0x25d0 lib.o
+ .text          0x0000000000001030     0x266c lib.o
                 0x0000000000001030                syscall_halt
                 0x0000000000001070                syscall_exec
                 0x00000000000010b8                syscall_execp
@@ -38,59 +38,63 @@ ro_segment      0x0000000000001000     0x3590
                 0x0000000000001234                syscall_open
                 0x000000000000127c                syscall_close
                 0x00000000000012c4                syscall_read
-                0x0000000000001318                syscall_seek
-                0x0000000000001368                syscall_write
-                0x00000000000013bc                syscall_create
-                0x000000000000140c                syscall_delete
-                0x0000000000001454                syscall_sem_open
-                0x00000000000014a4                syscall_sem_p
-                0x00000000000014ec                syscall_sem_v
-                0x0000000000001534                strlen
-                0x0000000000001598                strcpy
-                0x0000000000001640                strncpy
-                0x000000000000171c                strcat
-                0x0000000000001774                strncat
-                0x0000000000001868                strcmp
-                0x00000000000018b0                strncmp
-                0x00000000000019e4                memcmp
-                0x0000000000001ac0                strstr
-                0x0000000000001b64                memset
-                0x0000000000001be0                memcpy
-                0x0000000000001c74                putc
-                0x0000000000001cb8                puts
-                0x0000000000001d64                getc_raw
-                0x0000000000001da8                getc
-                0x0000000000001e00                gets
-                0x0000000000001eb4                readline
-                0x0000000000002d98                printf
-                0x0000000000002e08                snprintf
-                0x0000000000002e70                heap_init
-                0x0000000000002ec0                malloc
-                0x0000000000003128                free
-                0x000000000000332c                calloc
-                0x00000000000033ec                realloc
-                0x0000000000003508                atoi
- .rodata        0x0000000000003600      0x110 lib.o
- .text          0x0000000000003710      0xbec osh.o
-                0x0000000000003710                print_prompt
-                0x0000000000003750                tokenize
-                0x00000000000038b0                run_program
-                0x00000000000038f4                run_command
-                0x0000000000003a0c                help
-                0x0000000000003ae0                main
-                0x0000000000003b34                cmd_echo
-                0x0000000000003be0                cmd_show
-                0x0000000000003dcc                cmd_read
-                0x0000000000003fb4                cmd_cp
-                0x000000000000420c                cmd_rm
-                0x0000000000004290                cmd_help
-                0x00000000000042c4                cmd_exit
- .rodata        0x00000000000042fc      0x294 osh.o
+                0x0000000000001318                syscall_filecount
+                0x0000000000001360                syscall_file
+                0x00000000000013b4                syscall_seek
+                0x0000000000001404                syscall_write
+                0x0000000000001458                syscall_create
+                0x00000000000014a8                syscall_delete
+                0x00000000000014f0                syscall_sem_open
+                0x0000000000001540                syscall_sem_p
+                0x0000000000001588                syscall_sem_v
+                0x00000000000015d0                strlen
+                0x0000000000001634                strcpy
+                0x00000000000016dc                strncpy
+                0x00000000000017b8                strcat
+                0x0000000000001810                strncat
+                0x0000000000001904                strcmp
+                0x000000000000194c                strncmp
+                0x0000000000001a80                memcmp
+                0x0000000000001b5c                strstr
+                0x0000000000001c00                memset
+                0x0000000000001c7c                memcpy
+                0x0000000000001d10                putc
+                0x0000000000001d54                puts
+                0x0000000000001e00                getc_raw
+                0x0000000000001e44                getc
+                0x0000000000001e9c                gets
+                0x0000000000001f50                readline
+                0x0000000000002e34                printf
+                0x0000000000002ea4                snprintf
+                0x0000000000002f0c                heap_init
+                0x0000000000002f5c                malloc
+                0x00000000000031c4                free
+                0x00000000000033c8                calloc
+                0x0000000000003488                realloc
+                0x00000000000035a4                atoi
+ .rodata        0x000000000000369c      0x110 lib.o
+ .text          0x00000000000037ac      0xf50 osh.o
+                0x00000000000037ac                print_prompt
+                0x00000000000037ec                tokenize
+                0x000000000000394c                run_program
+                0x0000000000003990                run_command
+                0x0000000000003aa8                help
+                0x0000000000003b7c                main
+                0x0000000000003bd0                cmd_echo
+                0x0000000000003c7c                cmd_show
+                0x0000000000003e68                cmd_read
+                0x000000000000404c                cmd_ls
+                0x000000000000423c                cmd_cmp
+                0x00000000000043e8                cmd_cp
+                0x0000000000004610                cmd_rm
+                0x0000000000004690                cmd_help
+                0x00000000000046c4                cmd_exit
+ .rodata        0x00000000000046fc      0x334 osh.o
 
-.rel.dyn        0x0000000000004590        0x0
+.rel.dyn        0x0000000000004a30        0x0
  .rel.dyn       0x0000000000000000        0x0 osh.o
 
-rw_segment      0x0000000000005000       0x58
+rw_segment      0x0000000000005000       0x70
  *(.data .bss COMMON)
  .data          0x0000000000005000        0x0 crt.o
  .bss           0x0000000000005000        0x0 crt.o
@@ -100,27 +104,27 @@ rw_segment      0x0000000000005000       0x58
  .bss           0x0000000000005000        0x0 lib.o
  COMMON         0x0000000000005000        0x4 lib.o
                 0x0000000000005000                free_list
- .data          0x0000000000005004       0x54 osh.o
+ .data          0x0000000000005004       0x6c osh.o
                 0x0000000000005004                commands
- .bss           0x0000000000005058        0x0 osh.o
-                0x0000000000005058                BINARY_ENDS_HERE = .
+ .bss           0x0000000000005070        0x0 osh.o
+                0x0000000000005070                BINARY_ENDS_HERE = .
 LOAD crt.o
 LOAD _syscall.o
 LOAD lib.o
 LOAD osh.o
 OUTPUT(osh elf32-bigmips)
 
-.scommon        0x0000000000005058        0x0
- .scommon       0x0000000000005058        0x0 lib.o
+.scommon        0x0000000000005070        0x0
+ .scommon       0x0000000000005070        0x0 lib.o
 
 .reginfo        0x0000000000000000       0x18
  .reginfo       0x0000000000000000       0x18 crt.o
 
-.pdr            0x0000000000000000      0x7c0
+.pdr            0x0000000000000000      0x840
  .pdr           0x0000000000000000       0x40 crt.o
  .pdr           0x0000000000000040       0x20 _syscall.o
- .pdr           0x0000000000000060      0x5c0 lib.o
- .pdr           0x0000000000000620      0x1a0 osh.o
+ .pdr           0x0000000000000060      0x600 lib.o
+ .pdr           0x0000000000000660      0x1e0 osh.o
 
 .mdebug.abi32   0x0000000000000000        0x0
  .mdebug.abi32  0x0000000000000000        0x0 lib.o
@@ -147,10 +151,12 @@ _syscall                                          _syscall.o
                                                   lib.o
 atoi                                              lib.o
 calloc                                            lib.o
+cmd_cmp                                           osh.o
 cmd_cp                                            osh.o
 cmd_echo                                          osh.o
 cmd_exit                                          osh.o
 cmd_help                                          osh.o
+cmd_ls                                            osh.o
 cmd_read                                          osh.o
 cmd_rm                                            osh.o
 cmd_show                                          osh.o
@@ -200,6 +206,10 @@ syscall_exec                                      lib.o
                                                   osh.o
 syscall_execp                                     lib.o
 syscall_exit                                      lib.o
+                                                  osh.o
+syscall_file                                      lib.o
+                                                  osh.o
+syscall_filecount                                 lib.o
                                                   osh.o
 syscall_fork                                      lib.o
 syscall_halt                                      lib.o

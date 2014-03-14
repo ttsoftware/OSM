@@ -15,4 +15,8 @@ int syscall_read(int filehandle, void* buffer, int length);
 
 int syscall_write(int filehandle, void const* buffer, int length);
 
+int syscall_filecount(char const* name);
+
+int syscall_file(char const* name, int index, char* buffer);
+
 #endif
