@@ -848,7 +848,7 @@ int tfs_file(fs_t *fs, int index, char* buffer) {
     for (unsigned int i = 0; i < TFS_MAX_FILES; i++) {
         if ((unsigned)index == i 
             && stringcmp(dir[i].name, "") != 0) {
-            
+
             (&buffer)[i] = dir[i].name;
         }
     }
