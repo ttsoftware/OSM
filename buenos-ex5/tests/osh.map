@@ -20,7 +20,7 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x3954
+ro_segment      0x0000000000001000     0x3950
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
@@ -89,9 +89,9 @@ ro_segment      0x0000000000001000     0x3954
                 0x0000000000004530                cmd_rm
                 0x00000000000045b0                cmd_help
                 0x00000000000045e4                cmd_exit
- .rodata        0x000000000000461c      0x338 osh.o
+ .rodata        0x000000000000461c      0x334 osh.o
 
-.rel.dyn        0x0000000000004954        0x0
+.rel.dyn        0x0000000000004950        0x0
  .rel.dyn       0x0000000000000000        0x0 osh.o
 
 rw_segment      0x0000000000005000       0x70

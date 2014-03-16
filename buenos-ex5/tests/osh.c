@@ -194,13 +194,14 @@ int cmd_ls(int argc, char** argv) {
     char temp_filename[VFS_NAME_LENGTH];
 
     int i = 0;
-    while (i < filecount) {
+    int files_found = 0;
+    while (files_found < filecount) {
 
         int code = syscall_file(volumename, i, temp_filename);
 
-        printf("%d\n", code);
         if (code == 0) {
             printf("%s\n", temp_filename);
+            files_found++;
         }
         i++;
     }
