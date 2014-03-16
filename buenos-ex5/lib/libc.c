@@ -286,4 +286,8 @@ int strlen(const char *str)
     return l;
 }
 
+int abs(int n) { 
+    return n > 0 ? n : -n; 
+}
+
 /*** @} */

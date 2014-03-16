@@ -76,5 +76,6 @@ void memoryset(void *target, char value, int size);
 
 /* convert string to integer */
 int atoi(const char *s);
+int abs(int x);
 
 #endif /* BUENOS_LIB_LIBC_H */

@@ -656,39 +656,44 @@ int vfs_close(openfile_t file)
 
 int vfs_seek(openfile_t file, int seek_position)
 {
-    //openfile_entry_t *openfile;
-    /*
-    if (vfs_start_op() != VFS_OK)
-        return VFS_UNUSABLE;*/
-
     KERNEL_ASSERT(seek_position >= 0);
-
-    kprintf("file id: %d\n", file);
-
-    char buffer[1];
-    int pos = 0;
-    while (vfs_read(file, &buffer, 1) > 0) {
-        kprintf("%d %d\n", pos, seek_position);
-        if (pos == seek_position) {
-            break;
-        }
-        pos++;
+    
+    if (vfs_start_op() != VFS_OK) {
+        return VFS_UNUSABLE;
     }
 
-    kprintf("%d\n", pos);
-
-    /*if (pos < seek_position) {
-        return -1;
-    }*/
-
-    /*semaphore_P(openfile_table.sem);
-
+    openfile_entry_t *openfile;
     openfile = vfs_verify_open(file);
+
+    semaphore_P(openfile_table.sem);
+    
+    int bytes_to_seek = abs(openfile->seek_position - seek_position);
+    
+    semaphore_V(openfile_table.sem);
+    vfs_end_op();
+
+    if (bytes_to_seek == 0) {
+        return VFS_OK;
+    }
+
+    char buffer[bytes_to_seek];
+    int read = vfs_read(file, &buffer, bytes_to_seek);
+
+    char temp_buffer[1];
+    if (read == 0 && vfs_read(file, &temp_buffer, 1) == 0) {
+        // we seeked beyond file.
+        return VFS_ERROR;
+    }
+
+    if (vfs_start_op() != VFS_OK) {
+        return VFS_UNUSABLE;
+    }
+    openfile = vfs_verify_open(file);
+    semaphore_P(openfile_table.sem);
     openfile->seek_position = seek_position;
+    semaphore_V(openfile_table.sem);
+    vfs_end_op();
 
-    semaphore_V(openfile_table.sem);*/
-
-    //vfs_end_op();
     return VFS_OK;
 }
 
@@ -725,8 +730,6 @@ int vfs_read(openfile_t file, void *buffer, int bufsize)
 
     ret = fs->read(fs, openfile->fileid, buffer, bufsize, 
 			openfile->seek_position);
-
-    kprintf("read ret: %d\n", ret);
 
     if (ret > 0) {
         semaphore_P(openfile_table.sem);
