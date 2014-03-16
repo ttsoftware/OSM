@@ -843,19 +843,22 @@ int tfs_file(fs_t *fs, int index, char* buffer) {
     semaphore_P(tfs->lock);
     tfs_direntry_t* dir = tfs->buffer_md;
 
+    int ret = VFS_NOT_FOUND;
+
     for (unsigned int i = 0; i < TFS_MAX_FILES; i++) {
         if ((unsigned) index == i) {
             if (stringcmp(dir[i].name, "") == 0) {
-                return VFS_ERROR;
+                break;
             }
             stringcopy(buffer, dir[i].name, VFS_NAME_LENGTH);
-            return 0;
+            ret = 0;
+            break;
         }
     }
 
     semaphore_V(tfs->lock);
 
-    return VFS_NOT_FOUND;
+    return ret;
 }
 
 /** @} */
