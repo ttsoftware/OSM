@@ -20,7 +20,7 @@ Linker script and memory map
 
                 0x0000000000001000                . = 0x1000
 
-ro_segment      0x0000000000001000     0x3a30
+ro_segment      0x0000000000001000     0x397c
  *(.text .rodata .rodata.*)
  .text          0x0000000000001000       0x24 crt.o
                 0x0000000000001000                _start
@@ -73,7 +73,7 @@ ro_segment      0x0000000000001000     0x3a30
                 0x0000000000003488                realloc
                 0x00000000000035a4                atoi
  .rodata        0x000000000000369c      0x110 lib.o
- .text          0x00000000000037ac      0xf50 osh.o
+ .text          0x00000000000037ac      0xe98 osh.o
                 0x00000000000037ac                print_prompt
                 0x00000000000037ec                tokenize
                 0x000000000000394c                run_program
@@ -84,14 +84,14 @@ ro_segment      0x0000000000001000     0x3a30
                 0x0000000000003c7c                cmd_show
                 0x0000000000003e68                cmd_read
                 0x000000000000404c                cmd_ls
-                0x000000000000423c                cmd_cmp
-                0x00000000000043e8                cmd_cp
-                0x0000000000004610                cmd_rm
-                0x0000000000004690                cmd_help
-                0x00000000000046c4                cmd_exit
- .rodata        0x00000000000046fc      0x334 osh.o
+                0x0000000000004184                cmd_cmp
+                0x0000000000004330                cmd_cp
+                0x0000000000004558                cmd_rm
+                0x00000000000045d8                cmd_help
+                0x000000000000460c                cmd_exit
+ .rodata        0x0000000000004644      0x338 osh.o
 
-.rel.dyn        0x0000000000004a30        0x0
+.rel.dyn        0x000000000000497c        0x0
  .rel.dyn       0x0000000000000000        0x0 osh.o
 
 rw_segment      0x0000000000005000       0x70

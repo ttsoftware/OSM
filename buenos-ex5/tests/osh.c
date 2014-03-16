@@ -194,15 +194,20 @@ int cmd_ls(int argc, char** argv) {
 
     printf("%d\n", filecount);
 
-    char filenames[filecount];
-    for (int i = 0; i < filecount; i++) {
-        syscall_file(volumename, i, filenames);
-    }
+    char temp_filename[VFS_NAME_LENGTH];
 
-    //ls arkimedes
+    int i = 0;
+    int files = 0;
+    while (files < filecount) {
 
-    for (int i = 0; i < filecount; i++) {
-        printf("%d\n", filenames[i]);
+        int code = syscall_file(volumename, i, temp_filename);
+
+        printf("%d\n", code);
+        if (code == 0) {
+            printf("%s\n", temp_filename);
+            files++;
+        }
+        i++;
     }
 
     return 0;

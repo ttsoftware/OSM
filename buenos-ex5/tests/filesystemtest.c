@@ -27,6 +27,10 @@ int main(void) {
 	handle = syscall_open((char const*) &file2);	
 	
 	syscall_write(handle, &buffer3, 11);
+
+	int ret_code = syscall_seek(handle, 12);
+	printf("%d\n", ret_code);
+
 	syscall_seek(handle, 0);
 	syscall_read(handle, &buffer3, 11);
 	syscall_write(FILEHANDLE_STDOUT, &buffer3, 11);	

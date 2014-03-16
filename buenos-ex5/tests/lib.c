@@ -42,7 +42,6 @@
 #include "proc/syscall.h"
 #include "tests/lib.h"
 
-
 /* Halt the system (sync disks and power off). This function will
  * never return. 
  */

@@ -665,6 +665,25 @@ int vfs_seek(openfile_t file, int seek_position)
     semaphore_P(openfile_table.sem);
 
     openfile = vfs_verify_open(file);
+
+    /*
+    char buffer[1];
+    int pos = 0;
+
+    int read = vfs_read(file, &buffer, 1);
+    kprintf("%d\n", read);
+    while (read != 0) {
+        if (pos == seek_position) {
+            break;
+        }
+        pos++;
+        read = vfs_read(file, &buffer, 1);
+    }
+
+    if (pos < seek_position) {
+        return -1;
+    }*/
+
     openfile->seek_position = seek_position;
 
     semaphore_V(openfile_table.sem);
@@ -707,9 +726,9 @@ int vfs_read(openfile_t file, void *buffer, int bufsize)
     ret = fs->read(fs, openfile->fileid, buffer, bufsize, 
 			openfile->seek_position);
 
-    if(ret > 0) {
+    if (ret > 0) {
         semaphore_P(openfile_table.sem);
-	openfile->seek_position += ret;
+	    openfile->seek_position += ret;
         semaphore_V(openfile_table.sem);
     }
 

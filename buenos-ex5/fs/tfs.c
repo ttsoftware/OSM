@@ -840,22 +840,22 @@ int tfs_filecount(fs_t* fs) {
 int tfs_file(fs_t *fs, int index, char* buffer) {
 
     tfs_t *tfs = (tfs_t *)fs->internal;
-
     semaphore_P(tfs->lock);
-
     tfs_direntry_t* dir = tfs->buffer_md;
 
     for (unsigned int i = 0; i < TFS_MAX_FILES; i++) {
-        if ((unsigned)index == i 
-            && stringcmp(dir[i].name, "") != 0) {
-
-            (&buffer)[i] = dir[i].name;
+        if ((unsigned) index == i) {
+            if (stringcmp(dir[i].name, "") == 0) {
+                return VFS_ERROR;
+            }
+            stringcopy(buffer, dir[i].name, VFS_NAME_LENGTH);
+            return 0;
         }
     }
 
     semaphore_V(tfs->lock);
 
-    return 0;
+    return VFS_NOT_FOUND;
 }
 
 /** @} */

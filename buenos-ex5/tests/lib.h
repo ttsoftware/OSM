@@ -48,6 +48,8 @@
 #define PROVIDE_HEAP_ALLOCATOR
 #define PROVIDE_MISC
 
+#define VFS_NAME_LENGTH 16
+
 #include <stdarg.h>
 #include <stddef.h>
 
