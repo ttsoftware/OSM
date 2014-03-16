@@ -183,8 +183,8 @@ int cmd_read(int argc, char** argv) {
 }
 
 int cmd_ls(int argc, char** argv) {
-    if (argc != 2) {
-        printf("Usage: ls <directory>\n");
+    if (argc > 2) {
+        printf("Usage: ls [<directory>]\n");
         return 1;
     }
 
@@ -196,9 +196,7 @@ int cmd_ls(int argc, char** argv) {
     int i = 0;
     int files_found = 0;
     while (files_found < filecount) {
-
         int code = syscall_file(volumename, i, temp_filename);
-
         if (code == 0) {
             printf("%s\n", temp_filename);
             files_found++;

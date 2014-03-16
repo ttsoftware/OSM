@@ -854,7 +854,6 @@ int tfs_file(fs_t *fs, int index, char* buffer) {
             ret = 0;
             break;
         }
-        kprintf("%s\n", dir[i].name);
     }
 
     semaphore_V(tfs->lock);
