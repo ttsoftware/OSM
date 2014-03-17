@@ -1,0 +1,61 @@
+\documentclass[12pt,a4paper,danish]{article}
+\usepackage [utf8]{inputenc}
+\usepackage [danish]{babel}
+\usepackage [T1]{fontenc}
+\usepackage {amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage [top=3.4cm, bottom=2cm, left=3cm, right=3cm] {geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pgfkeys}
+\titleformat{\section}[block]{\large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries\filcenter}{}{1em}{}
+\setcounter{secnumdepth}{0}
+\usepackage{pgfgantt}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usetikzlibrary{positioning,shapes, shadows, arrows}
+\usepackage{tikz}
+\usepackage{url}
+\linespread{1.2}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[L]{G4}
+\fancyhead[C]{OSM}
+\fancyhead[R]{March 9 2014}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{\fill}
+    \begin{center}
+      {\Huge Operating systems and multiprogramming}\\[0.7cm]
+      {\huge G-assignment 5}\\[0.7cm]
+      {\large Alexander Worm Olsen - bdj816}\\[0.4cm]
+      {\large Allan Martin Nielsen - jcl187}\\[0.4cm]
+      {\large Troels Thompsen - qvw203}\\[0.4cm]
+      {\small March 17 2014}\\[0.3cm] 
+      {\small Department of Computer Science}\\
+      {\small University of Copenhagen}
+    \end{center}
+    \vspace*{\fill}
+\end{titlepage}
+
+\section{System calls for the Buenos file system}
+This task required us to implement new file handling system call, as the previous implemented syscall_read and syscall_write from G-1. The system calls we are asked to extend the system with, are open, close, create, delete, seek.
+The two calls, read and write, is also need to be re-implemented, but we found it unnecessary to do so, as they works as they are.\\
+For the system calls we use the corresponding vfs-functions and make sure our filehandles is added by 2, to prevent conflicts with the predifened filehandles.
+\section{A simple shell and directory listing support}
+In this task we were asked to extend a shell, giving it a broader selection of commands at its disposal. The commands are listed below with a brief description of how we implemented each one of them into the shell. 
+\begin{itemize}
+\item exit: We call the system call syscall\_exit(), which terminates the current process of the system and therefore exits the shell.
+\item rm: We use the tfs\_delete through vfs\_remove, which  frees the blocks used by the given argument, if it exists.
+\item cp: We read through the argument to copied and load it's content into a buffer, followed by a vfs\_create with the argument to be copied to, write the buffer content into  this path.
+\item cmp: We read through each file, bit by bit, returning the first incident the two are not equal.
+\item ls: To implement this command, we are asked to implement two new system calls; syscall_filecount and syscall_file. We use these to list our volume, by iterating over the files in the current volume (the argument), if the filevount is greater than zero. As long as it i not zero, we iterate through the amount fo files found, finding the index of the corresponding file and copy its name to a buffer and print these out.
+\end{itemize}
+
+
+\end{document}
